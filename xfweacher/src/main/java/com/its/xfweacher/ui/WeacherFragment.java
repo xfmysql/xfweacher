@@ -94,7 +94,7 @@ public class WeacherFragment extends Fragment implements WeatherAsyncTask.ShowWe
 
 
 		try {
-			new WeatherAsyncTask(this.getActivity()).execute("绍兴");
+			//new WeatherAsyncTask(this.getActivity()).execute("绍兴");
 		}catch (Exception e){
 			e.printStackTrace();
 		}
