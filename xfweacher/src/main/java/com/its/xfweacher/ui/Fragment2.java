@@ -6,12 +6,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.its.xfweacher.entity.Weather;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.its.xfweacher.R;
+
+import java.util.List;
 
 public class Fragment2 extends Fragment {
 	private static final String TAG = "Fragment2";
@@ -81,16 +85,23 @@ public class Fragment2 extends Fragment {
 		Ion.with(this.getActivity())
 				.load("http://192.168.1.143:9080/oauth/oauth2-php/server/resource.php")
 				//.setHeader("Authorization","Bearer "+token)
-				.setBodyParameter("a", "a")
 				.setBodyParameter("oauth_token",token)
-				.asString()
-				.setCallback(new FutureCallback<String>() {
+				.setBodyParameter("api", "getweather")				
+				.setBodyParameter("city", "绍兴")
+				.asJsonObject()
+				.setCallback(new FutureCallback<JsonObject>() {
 					@Override
-					public void onCompleted(Exception e, String result) {
+					public void onCompleted(Exception e, JsonObject result) {
 						try {
-							Log.e(TAG, result.toString());
+							Gson gson = new Gson();
+							String s = gson.toJson(result.getAsJsonArray("data"));
+							Log.e(TAG,s);
+							List<Weather> wlist = gson.fromJson(s, new TypeToken<List<Weather>>() {
+								}.getType());
+							for(Weather w :wlist)
+									Log.e(TAG,w.getWeatherdate()+","+w.getPm25()+","+w.getTemperature()+","+w.getWeatherstr()+","+w.getWind()+"\n\r");
 
-						} catch (Exception er) {
+							} catch (Exception er) {
 							er.printStackTrace();
 						}
 					}
