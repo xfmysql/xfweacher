@@ -14,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.its.xfweacher.R;
-import com.its.xfweacher.entity.City;
 import com.its.xfweacher.helper.LocationHelper;
 import com.its.xfweacher.utils.LocationUtils;
 
@@ -29,7 +28,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private ImageView weacherImg;
     private TextView weacherTxt;
 
-    private Fragment2 fg2;
+    private NewsFragment fg2;
     private RelativeLayout lookLayout;
     private ImageView lookImg;
     private TextView lookTxt;
@@ -173,7 +172,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 //found_layout.setBackgroundResource(R.drawable.ic_tabbar_bg_click);
                 if (fg2 == null) {
                     // 如果fg1为空，则创建一个并添加到界面上
-                    fg2 = new Fragment2();
+                    fg2 = new NewsFragment();
                     transaction.add(R.id.content, fg2);
                 } else {
                     // 如果MessageFragment不为空，则直接将它显示出来

@@ -35,6 +35,12 @@
             android:screenOrientation="portrait" >
         </activity>
 
+        <activity
+            android:name=".ui.NewsActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" >
+        </activity>
         <meta-data
             android:name="ak"
             android:value="B95329fb7fdda1e32ba3e3a245193146" />
