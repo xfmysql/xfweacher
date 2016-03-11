@@ -112,7 +112,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             if (TextUtils.isEmpty(name)) {
                 Toast.makeText(MainActivity.this,"没有这个城市",Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(MainActivity.this,"定位:"+name,Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this,"定位:"+name,Toast.LENGTH_SHORT).show();
             }
         }
         @Override

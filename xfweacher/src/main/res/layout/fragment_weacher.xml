@@ -4,21 +4,21 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:background="@color/black">
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-        <LinearLayout
+    android:background="@drawable/bg1">
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
+
             android:id="@+id/layoutRoot"
             android:background="@android:color/transparent">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:id="@+id/layoutTime">
+                android:id="@+id/layoutTime"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -51,13 +51,17 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="220dp"></RelativeLayout>
+                android:layout_height="wrap_content"
+                android:id="@+id/layoutCenter"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/layoutTime"></RelativeLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/layoutToday">
+                android:id="@+id/layoutToday"
+                android:layout_above="@+id/layoutDetail">
 
                 <LinearLayout
                     android:orientation="vertical"
@@ -155,10 +159,12 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:id="@+id/relativeLayout2"
+                android:id="@+id/layoutDetail"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp">
+                android:layout_marginRight="10dp"
+                android:layout_centerHorizontal="true"
+                android:layout_above="@+id/layoutBottom">
 
                 <TextView
                     style="@style/whiteText"
@@ -173,7 +179,10 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:id="@+id/layoutBottom"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -330,7 +339,7 @@
                 </LinearLayout>
             </RelativeLayout>
 
-        </LinearLayout>
-    </ScrollView>
+        </RelativeLayout>
+
 
 </LinearLayout>
