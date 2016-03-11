@@ -31,7 +31,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 public class NewsFragment extends Fragment  implements AdapterView.OnItemClickListener {
 
-	public final String RSS_URL = "http://news.baidu.com/n?cmd=1&class=civilnews&tn=rss";
+	public final String RSS_URL = "http://news.baidu.com/n?cmd=1&class=mil&tn=rss";
 	private RssFeed feed;
 	Handler showHandler;
 	public final String TAG = "NewsFragment";
@@ -62,9 +62,6 @@ public class NewsFragment extends Fragment  implements AdapterView.OnItemClickLi
 					{
 						List<RssItem> list = feed.getAllItems();
 						adapter.setData(list);
-						for(RssItem r : list){
-							Log.e(TAG,"=========="+ r.getLink());
-						}
 						break;
 					}
 				}

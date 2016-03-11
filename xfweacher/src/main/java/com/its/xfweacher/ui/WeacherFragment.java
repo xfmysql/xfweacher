@@ -2,6 +2,7 @@ package com.its.xfweacher.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,14 +11,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.its.xfweacher.R;
+import com.its.xfweacher.helper.APIHelper;
 import com.its.xfweacher.helper.WeatherAsyncTask;
 import com.its.xfweacher.json.entity.Result;
 import com.its.xfweacher.json.entity.Weather;
 import com.its.xfweacher.json.entity.Weather_data;
+import com.its.xfweacher.utils.DateUtils;
+import com.its.xfweacher.utils.SystemUtils;
 
-public class WeacherFragment extends Fragment implements WeatherAsyncTask.ShowWeacherCallback {
+import java.util.List;
 
+public class WeacherFragment extends Fragment implements APIHelper.WeatherReflush {
 
+	private static final String TAG = "WeacherFragment";
 	private TextView txtLoaction,txtTime;
 	private TextView txtWeacherName,txtTemperature;
 
@@ -90,63 +96,61 @@ public class WeacherFragment extends Fragment implements WeatherAsyncTask.ShowWe
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		WeatherAsyncTask.setWeacherCallback(this);
-
 
 		try {
 			//new WeatherAsyncTask(this.getActivity()).execute("绍兴");
+			//WeatherAsyncTask.setWeacherCallback(this);
 		}catch (Exception e){
 			e.printStackTrace();
+		}
+
+		APIHelper.setWeatherReflush(this);
+		String token = SystemUtils.getToken();
+		if(!TextUtils.isEmpty(token)) {
+			APIHelper.getWeather(token);
 		}
 	}
 
 	@Override
-	public void onShowWeacher(Weather result) {
-		Result res = result.getResults().get(0);
-        txtLoaction.setText(res.getCurrentCity());
-        txtTime.setText(result.getDate());
+	public void onReflush(List<com.its.xfweacher.entity.Weather> pList) {
+		for(com.its.xfweacher.entity.Weather w :pList)
+			Log.e(TAG,w.getWeatherdate()+","+w.getPm25()+","+w.getTemperature()+","+w.getWeatherstr()+","+w.getWind()+"\n\r");
 
-        Weather_data wa = res.getWeather_data().get(0);
-        Log.e("Result", "" + res.toString());
-        Log.e("Weather_data", "" + wa.toString());
-        //
-        txtWeacherName.setText(wa.getWeather());
-        String str = wa.getDate();
-        txtTemperature.setText(str.substring(14, str.length()-1));
-        String pm2_5 = "".equals(res.getPm25()) ? "75" : res.getPm25();
-        txtContent.setText("PM2.5:" + pm2_5);
+		com.its.xfweacher.entity.Weather w = pList.get(0);
+		txtLoaction.setText("");
+		String date = DateUtils.Timestamp2String(w.getAddtime());
+		txtTime.setText(date);
+
+		//
+		txtWeacherName.setText(w.getWeatherstr());
+		txtTemperature.setText(w.getTemperature());
+		txtContent.setText("PM2.5:" + w.getPm25());
 
 
-        // Ӧ��Ϊ�������ϻ�ȡ����
-//			ivpic11.setImageResource(R.drawable.d00);
-//			ivpic12.setImageResource(R.drawable.d01);
-        ivpic11.setImageBitmap(wa.getDayPicture());
-        ivpic12.setImageBitmap(wa.getNightPicture());
+		//ivpic11.setImageBitmap(w.get);
+		//ivpic12.setImageBitmap(wa.getNightPicture());
+		tvweek1.setText(w.getWeatherdate());
+		tvwea1.setText(w.getWeatherstr());
+		tvwind1.setText(w.getWind());
+		tvtemper1.setText(w.getTemperature());
 
-        tvweek1.setText(str.substring(0, 2));
-        tvwea1.setText(wa.getWeather());
-        tvwind1.setText(wa.getWind());
-        tvtemper1.setText(wa.getTemperature());
+		w = pList.get(1);
+		tvtemper2.setText(w.getTemperature());
+		//ivpic21.setImageBitmap(w.getDayPicture());
+		//ivpic22.setImageBitmap(w.getNightPicture());
+		tvweek2.setText(w.getWeatherdate());
+		tvwea2.setText(w.getWeatherstr());
+		tvwind2.setText(w.getWind());
+		tvtemper2.setText(w.getTemperature());
 
-        wa = res.getWeather_data().get(1);
-        // System.out.println(wa2);
+		w = pList.get(2);
+		tvtemper3.setText(w.getTemperature());
+		//ivpic31.setImageBitmap(wa.getDayPicture());
+		//ivpic32.setImageBitmap(wa.getNightPicture());
+		tvweek3.setText(w.getWeatherdate());
+		tvwea3.setText(w.getWeatherstr());
+		tvwind3.setText(w.getWind());
+		tvtemper3.setText(w.getTemperature());
 
-        tvtemper2.setText(wa.getTemperature());
-        ivpic21.setImageBitmap(wa.getDayPicture());
-        ivpic22.setImageBitmap(wa.getNightPicture());
-        tvweek2.setText(wa.getDate());
-        tvwea2.setText(wa.getWeather());
-        tvwind2.setText(wa.getWind());
-        tvtemper2.setText(wa.getTemperature());
-
-        wa = res.getWeather_data().get(2);
-
-        // System.out.println(wa4);
-        ivpic31.setImageBitmap(wa.getDayPicture());
-        ivpic32.setImageBitmap(wa.getNightPicture());
-        tvweek3.setText(wa.getDate());
-        tvwea3.setText(wa.getWeather());
-        tvwind3.setText(wa.getWind());
-        tvtemper3.setText(wa.getTemperature());
 	}
 }

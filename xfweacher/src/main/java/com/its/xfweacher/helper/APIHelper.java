@@ -6,8 +6,11 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.its.xfweacher.AppContext;
 import com.its.xfweacher.entity.Weather;
 import com.its.xfweacher.json.entity.RssFeed;
+import com.its.xfweacher.utils.Constants;
+import com.its.xfweacher.utils.SystemUtils;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -33,13 +36,13 @@ public class APIHelper {
 
     private Context mContext;
     static final String TAG = "APIHelper";
-    void getTokenCode()
+    public static void getTokenCode()
     {
-        Ion.with(mContext)
-                .load("http://192.168.1.143:9080/oauth/oauth2-php/server/authorize.php")
+        Ion.with(AppContext.getInstance())
+                .load(Constants.Url_Oauth_Authorize)
                         //.setHeader("Authorization", "Bearer " + t)
-                .setBodyParameter("client_id", "lianx315")
-                .setBodyParameter("password", "")
+                .setBodyParameter("client_id", Constants.API_Username)
+                //.setBodyParameter("password", "")
                 .setBodyParameter("response_type", "code")
                 .setBodyParameter("redirect_uri", "")
                 .setBodyParameter("state", "c39af7d864dfac92478b56a5989f3102")
@@ -58,12 +61,12 @@ public class APIHelper {
                 });
     }
 
-    void getToken(String code){
-        Ion.with(mContext)
-                .load("http://192.168.1.143:9080/oauth/oauth2-php/server/token.php")
+    static void getToken(String code){
+        Ion.with(AppContext.getInstance())
+                .load(Constants.Url_Oauth_Token)
                         //.setHeader("Authorization", "Bearer " + t)
-                .setBodyParameter("client_id", "lianx315")
-                .setBodyParameter("client_secret", "123456")
+                .setBodyParameter("client_id", Constants.API_Username)
+                .setBodyParameter("client_secret", Constants.API_Password)
                 .setBodyParameter("code", code)
                 .setBodyParameter("grant_type", "authorization_code")
                 .setBodyParameter("redirect_uri", "1")
@@ -73,7 +76,8 @@ public class APIHelper {
                     public void onCompleted(Exception e, JsonObject result) {
                         try {
                             Log.e(TAG, result.toString());
-                            getWeather(result.get("access_token").toString().replace("\"", ""));
+                            String access_token = result.get("access_token").toString().replace("\"", "");
+                            SystemUtils.setToken(access_token);
                         } catch (Exception er) {
                             er.printStackTrace();
                         }
@@ -82,9 +86,17 @@ public class APIHelper {
     }//end function
 
 
-    void getWeather(String token){
-        Ion.with(mContext)
-                .load("http://192.168.1.143:9080/oauth/oauth2-php/server/resource.php")
+    public interface WeatherReflush
+    {
+        void onReflush(List<Weather> list);
+    }
+    private static WeatherReflush weatherReflush;
+    public static void setWeatherReflush(WeatherReflush pWeatherReflush){
+        weatherReflush = pWeatherReflush;
+    }
+    public static void getWeather(String token){
+        Ion.with(AppContext.getInstance())
+                .load(Constants.Url_Oauth_Api)
                         //.setHeader("Authorization","Bearer "+token)
                 .setBodyParameter("oauth_token", token)
                 .setBodyParameter("api", "getweather")
@@ -95,12 +107,16 @@ public class APIHelper {
                     public void onCompleted(Exception e, JsonObject result) {
                         try {
                             Gson gson = new Gson();
+                            Log.e(TAG,result.toString());
                             String s = gson.toJson(result.getAsJsonArray("data"));
-                            Log.e(TAG,s);
+
                             List<Weather> wlist = gson.fromJson(s, new TypeToken<List<Weather>>() {
                             }.getType());
-                            for(Weather w :wlist)
-                                Log.e(TAG,w.getWeatherdate()+","+w.getPm25()+","+w.getTemperature()+","+w.getWeatherstr()+","+w.getWind()+"\n\r");
+
+                            if(weatherReflush!=null)//回调
+                                weatherReflush.onReflush(wlist);
+//                            for(Weather w :wlist)
+//                                Log.e(TAG,w.getWeatherdate()+","+w.getPm25()+","+w.getTemperature()+","+w.getWeatherstr()+","+w.getWind()+"\n\r");
 
                         } catch (Exception er) {
                             er.printStackTrace();

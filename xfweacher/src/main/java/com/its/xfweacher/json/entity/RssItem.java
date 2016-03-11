@@ -2,6 +2,7 @@ package com.its.xfweacher.json.entity;
 
 
 import android.text.TextUtils;
+import android.util.Log;
 
 public class RssItem {
     private String _category;
@@ -9,16 +10,14 @@ public class RssItem {
     private String _link;
     private String _pubdate;
     private String _title;
-
+    private String _img;
     public RssItem() {
     }
 
     public String getTitle() {
-        if(!TextUtils.isEmpty(_title))
-            if(_title.length() > 0x14) {
-                return _title.substring(0x0, 0x13) + "...";
-            }
-        else _title="";
+        if(_title.length() > 0x14) {
+            return _title.substring(0x0, 0x13) + "...";
+        }
         return _title;
     }
 
@@ -58,7 +57,16 @@ public class RssItem {
         _pubdate = pubdate;
     }
 
+    public String getImage() {
+        return _img;
+    }
+
+    public void setImage(String img) {
+        _img = img;
+    }
+
     public String toString() {
-        return "RssItem [title=" + _title + ", description=" + _description + ", link=" + _link + ", category=" + _category + ", pubdate=" + _pubdate + "]";
+        return "RssItem [title=" + _title + ", description=" + _description + ", link=" + _link +
+                ", category=" + _category + ", pubdate=" + _pubdate + ", image=" + _img+"]";
     }
 }

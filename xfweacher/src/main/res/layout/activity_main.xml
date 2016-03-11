@@ -6,14 +6,21 @@
     <FrameLayout
         android:id="@+id/content"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="0.8dp"
         android:layout_weight="1" >
     </FrameLayout>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/siztdot5"
+        android:id="@+id/lineBottom"
+        android:background="@color/gray" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="#FFFFFF" >
+        android:background="#FFFFFF"
+        android:orientation="horizontal">
 
         <RelativeLayout
             android:id="@+id/weacherLayout"

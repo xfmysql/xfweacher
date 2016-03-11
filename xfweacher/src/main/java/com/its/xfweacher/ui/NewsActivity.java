@@ -89,10 +89,10 @@ public class NewsActivity extends Activity {
 
 	public boolean onKeyDown(int keyCoder,KeyEvent event){
 		if(keyCoder == KeyEvent.KEYCODE_BACK){
-			if(webview.canGoBack()){
-				webview.goBack();   //goBack()表示返回webView的上一页面
-			}
-			else
+//			if(webview.canGoBack()){
+//				webview.goBack();   //goBack()表示返回webView的上一页面
+//			}
+//			else
 				NewsActivity.this.finish();
 			return true;
 		}
