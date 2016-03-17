@@ -13,8 +13,12 @@ public class SystemUtils {
     public static String getToken(){
         return AppContext.getStringPreferences(Constants.Key_Token);
     }
+    public static String getTokenReflushTime(){
+        return AppContext.getStringPreferences(Constants.Key_WeatherReflushTime);
+    }
     public static void setToken(String value){
         AppContext.setStringPreferences(Constants.Key_Token, value);
+        AppContext.setStringPreferences(Constants.Key_WeatherReflushTime, System.currentTimeMillis()/1000+"");
     }
 
     public static int getWeatherReflushTime(){

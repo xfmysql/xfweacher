@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.its.xfweacher.R;
 import com.its.xfweacher.helper.APIHelper;
+import com.its.xfweacher.helper.GetTokenItf;
 import com.its.xfweacher.helper.WeatherAsyncTask;
 import com.its.xfweacher.json.entity.Result;
 import com.its.xfweacher.json.entity.Weather;
@@ -20,8 +21,8 @@ import com.its.xfweacher.utils.DateUtils;
 import com.its.xfweacher.utils.SystemUtils;
 
 import java.util.List;
-
-public class WeacherFragment extends Fragment implements APIHelper.WeatherReflush {
+import android.support.v4.widget.SwipeRefreshLayout;
+public class WeacherFragment extends Fragment implements APIHelper.WeatherReflush,GetTokenItf {
 
 	private static final String TAG = "WeacherFragment";
 	private TextView txtLoaction,txtTime;
@@ -48,11 +49,36 @@ public class WeacherFragment extends Fragment implements APIHelper.WeatherReflus
 	private TextView tvwea3;
 	private TextView tvwind3;
 	private TextView tvtemper3;
-
+	SwipeRefreshLayout mSwipeRefreshLayout;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_weacher, container,false);
+
+		mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+			@Override
+			public void onRefresh() {
+
+				String reflushTime = SystemUtils.getTokenReflushTime();
+				if ((System.currentTimeMillis() / 1000 - Long.parseLong(reflushTime)) > 3600) {
+					APIHelper.getTokenCode(WeacherFragment.this);
+				}else {
+					String token = SystemUtils.getToken();
+					if(!TextUtils.isEmpty(token)) {
+						APIHelper.getWeather(token);
+					}
+				}
+
+				mSwipeRefreshLayout.setRefreshing(true);
+				mSwipeRefreshLayout.postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						mSwipeRefreshLayout.setRefreshing(false);
+					}
+				}, 3000);
+			}
+		});
 
 		txtLoaction = (TextView) view.findViewById(R.id.txtLoaction);
 		txtTime = (TextView) view.findViewById(R.id.txtTime);
@@ -90,7 +116,13 @@ public class WeacherFragment extends Fragment implements APIHelper.WeatherReflus
 		tvwind1 = (TextView) view.findViewById(R.id.tvwind1);
 		tvtemper1 = (TextView) view.findViewById(R.id.tvtemper1);
 
-
+		mSwipeRefreshLayout.setRefreshing(true);
+		mSwipeRefreshLayout.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				mSwipeRefreshLayout.setRefreshing(false);
+			}
+		}, 3000);
 		return view;
 	}
 	@Override
@@ -111,6 +143,11 @@ public class WeacherFragment extends Fragment implements APIHelper.WeatherReflus
 		}
 	}
 
+	@Override
+	public void onResume(){
+		APIHelper.setWeatherReflush(this);
+		super.onResume();
+	}
 	@Override
 	public void onReflush(List<com.its.xfweacher.entity.Weather> pList) {
 		for(com.its.xfweacher.entity.Weather w :pList)
@@ -152,5 +189,13 @@ public class WeacherFragment extends Fragment implements APIHelper.WeatherReflus
 		tvwind3.setText(w.getWind());
 		tvtemper3.setText(w.getTemperature());
 
+	}
+
+	@Override
+	public void AfterGet() {
+		String token = SystemUtils.getToken();
+		if(!TextUtils.isEmpty(token)) {
+			APIHelper.getWeather(token);
+		}
 	}
 }

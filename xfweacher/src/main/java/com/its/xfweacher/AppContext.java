@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import com.its.xfweacher.helper.APIHelper;
+import com.its.xfweacher.helper.GetTokenItf;
 import com.its.xfweacher.utils.SystemUtils;
 
 /**
@@ -54,14 +55,19 @@ public class AppContext extends Application {
             //ViewUtils.showToast("系统初始化失败");
         }
 
+
         String token = SystemUtils.getToken();
         if(TextUtils.isEmpty(token))
         {
-            APIHelper.getTokenCode();
+            APIHelper.getTokenCode(null);
         }
-
+        else {  //已结获取过token ,超过token过期时间重新获取
+            String reflushTime = SystemUtils.getTokenReflushTime();
+            if ((System.currentTimeMillis() / 1000 - Long.parseLong(reflushTime)) > 3600) {
+                APIHelper.getTokenCode(null);
+            }
+        }
         //endregion
-
     }
 
 
@@ -110,5 +116,6 @@ public class AppContext extends Application {
     public static void setIntPreferences(String key,int value) {
         sharedPreferences.edit().putInt(key, value).commit();
     }
+
     //endregion
 }

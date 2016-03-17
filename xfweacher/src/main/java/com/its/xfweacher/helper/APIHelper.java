@@ -1,6 +1,7 @@
 package com.its.xfweacher.helper;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -36,7 +37,7 @@ public class APIHelper {
 
     private Context mContext;
     static final String TAG = "APIHelper";
-    public static void getTokenCode()
+    public static void getTokenCode(final GetTokenItf after)
     {
         Ion.with(AppContext.getInstance())
                 .load(Constants.Url_Oauth_Authorize)
@@ -53,7 +54,7 @@ public class APIHelper {
                     public void onCompleted(Exception e, String result) {
                         try {
                             Log.e(TAG, result.toString());
-                            getToken(result);
+                            getToken(result,after);
                         } catch (Exception er) {
                             er.printStackTrace();
                         }
@@ -61,7 +62,7 @@ public class APIHelper {
                 });
     }
 
-    static void getToken(String code){
+    static void getToken(String code,final GetTokenItf after){
         Ion.with(AppContext.getInstance())
                 .load(Constants.Url_Oauth_Token)
                         //.setHeader("Authorization", "Bearer " + t)
@@ -78,6 +79,8 @@ public class APIHelper {
                             Log.e(TAG, result.toString());
                             String access_token = result.get("access_token").toString().replace("\"", "");
                             SystemUtils.setToken(access_token);
+                            if(after!=null)
+                                after.AfterGet();
                         } catch (Exception er) {
                             er.printStackTrace();
                         }
@@ -120,6 +123,12 @@ public class APIHelper {
 
                         } catch (Exception er) {
                             er.printStackTrace();
+                            //重新获取token
+//                            APIHelper.getTokenCode();
+//                            String token = SystemUtils.getToken();
+//                            if(!TextUtils.isEmpty(token)) {
+//                                APIHelper.getWeather(token);
+//                            }
                         }
                     }
                 });
