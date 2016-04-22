@@ -12,11 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.its.xfweacher.R;
+import com.its.xfweacher.entity.Constants;
 import com.its.xfweacher.helper.APIHelper;
 import com.its.xfweacher.json.entity.RssFeed;
 import com.its.xfweacher.json.entity.RssItem;
@@ -29,9 +31,8 @@ import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-public class NewsFragment extends Fragment  implements AdapterView.OnItemClickListener {
+public class NewsFragment extends Fragment  implements AdapterView.OnItemClickListener,View.OnClickListener {
 
-	public final String RSS_URL = "http://news.baidu.com/n?cmd=1&class=mil&tn=rss";
 	private RssFeed feed;
 	Handler showHandler;
 	public final String TAG = "NewsFragment";
@@ -39,11 +40,29 @@ public class NewsFragment extends Fragment  implements AdapterView.OnItemClickLi
 	ListView listView;
 
 	articleAdapter adapter = null;
+	String RSS_URL = Constants.Techn_URL;
 	//LayoutInflater inflater = null;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 		//this.inflater = inflater;
 		View view = inflater.inflate(R.layout.fragment_news, container,false);
+		Button btnTechn = (Button)view.findViewById(R.id.btnTechn);
+		btnTechn.setOnClickListener(this);
+		Button btnInternet = (Button)view.findViewById(R.id.btnInternet);
+		btnInternet.setOnClickListener(this);
+		Button btnEnter = (Button)view.findViewById(R.id.btnEnter);
+		btnEnter.setOnClickListener(this);
+		Button btnSocia = (Button)view.findViewById(R.id.btnSocia);
+		btnSocia.setOnClickListener(this);
+
+		Button btnInter = (Button)view.findViewById(R.id.btnInter);
+		btnInter.setOnClickListener(this);
+		Button btnMil = (Button)view.findViewById(R.id.btnMil);
+		btnMil.setOnClickListener(this);
+		Button btnAuto = (Button)view.findViewById(R.id.btnAuto);
+		btnAuto.setOnClickListener(this);
+		Button btnHealth = (Button)view.findViewById(R.id.btnHealth);
+		btnHealth.setOnClickListener(this);
 		return view;
 	}
 	@Override
@@ -101,8 +120,53 @@ public class NewsFragment extends Fragment  implements AdapterView.OnItemClickLi
 		startActivityForResult(intent, 0x0);
 	}
 
-	public void onReflush(View v){
+	@Override
+	public void onClick(View view) {
+		switch(view.getId()) {
+			case R.id.btnTechn:
+			{
+				RSS_URL = Constants.Techn_URL;
+				break;
+			}
+			case R.id.btnInternet:
+			{
+				RSS_URL = Constants.Internet_URL;
+				break;
+			}
+			case R.id.btnEnter:
+			{
+				RSS_URL = Constants.Enter_URL;
+				break;
+			}
+			case R.id.btnSocia:
+			{
+				RSS_URL = Constants.Socia_URL;
+				break;
+			}
+			case R.id.btnInter:
+			{
+				RSS_URL = Constants.Inter_URL;
+				break;
+			}
+			case R.id.btnMil:
+			{
+				RSS_URL = Constants.Mil_URL;
+				break;
+			}
+			case R.id.btnAuto:
+			{
+				RSS_URL = Constants.Auto_URL;
+				break;
+			}
+			case R.id.btnHealth:
+			{
+				RSS_URL = Constants.Health_URL;
+				break;
+			}
+		}
 		new Thread(downloadImage).start();
+
+
 	}
 
 	class articleAdapter extends BaseAdapter {

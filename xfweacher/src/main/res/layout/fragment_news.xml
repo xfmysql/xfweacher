@@ -37,10 +37,71 @@
         android:background="@color/gray"
         android:layout_below="@+id/title_bar" />
 
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:id="@+id/horizontalScrollView"
+        android:layout_below="@+id/lineHeader">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="科技"
+                android:id="@+id/btnTechn" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="互联网"
+                android:id="@+id/btnInternet" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="娱乐"
+                android:id="@+id/btnEnter" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="社会"
+                android:id="@+id/btnSocia" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="国际"
+                android:id="@+id/btnInter" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="军事"
+                android:id="@+id/btnMil" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="汽车"
+                android:id="@+id/btnAuto" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="健康"
+                android:id="@+id/btnHealth" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listView"
-        android:layout_below="@+id/lineHeader" />
+        android:layout_below="@+id/horizontalScrollView" />
 
 </RelativeLayout>

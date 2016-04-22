@@ -30,32 +30,7 @@ public class AppContext extends Application {
         initSDDirectory();
         //endregion
 
-        //region 初始化逻辑
-        try {
-            //region 初始化语音
-            int volumn = 8,speed = 8, speadtype=0;
-//            String strVolumn = appContext.getProperty(AppConfig.SetVolumn);
-//            if(!StringUtils.isEmpty(strVolumn))
-//                volumn = Integer.parseInt(strVolumn);
-//            String strSpeed = appContext.getProperty(AppConfig.SetSpeed);
-//            if(!StringUtils.isEmpty(strSpeed))
-//                speed = Integer.parseInt(strSpeed);
-//
-//            String speaktype = appContext.getProperty(AppConfig.SetSpeakType);
-//            if(!StringUtils.isEmpty(speaktype)) {
-//                if (Integer.parseInt(speaktype) == 0)
-//                    speadtype = 0;
-//                else
-//                    speadtype = 1;
-//            }
-            //TtsService.getTtsService().initial(appContext,volumn,speed,speadtype);
-            //TtsService.getTtsService().speak("欢迎使用顺治校安系统");
-            //endregion
-        } catch (Exception e){
-            //ViewUtils.showToast("系统初始化失败");
-        }
-
-
+        //获取token
         String token = SystemUtils.getToken();
         if(TextUtils.isEmpty(token))
         {

@@ -136,7 +136,7 @@ public class WeacherFragment extends Fragment implements APIHelper.WeatherReflus
 			e.printStackTrace();
 		}
 
-		APIHelper.setWeatherReflush(this);
+		APIHelper.setWeatherReflush(this);//回调
 		String token = SystemUtils.getToken();
 		if(!TextUtils.isEmpty(token)) {
 			APIHelper.getWeather(token);

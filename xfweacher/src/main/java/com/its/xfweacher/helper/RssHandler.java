@@ -123,10 +123,16 @@ public class RssHandler extends DefaultHandler {
         super.endElement(uri, localName, qName);
         if("item".equals(localName) && rssItem != null) {//只需要item标记的内容
             String s = sb.toString();
-            s = Html2Text(s).replace("\t","").replace("\n","").substring(0,30);
-
-            String t = rssItem.getPubdate().substring(0,rssItem.getPubdate().lastIndexOf(".")).replace("T"," ");
-             rssItem.setDescription(s+ "\t\t"+ t);
+            s = Html2Text(s).replace("\t","").replace("\n","");
+            s = s.length()>30?s.substring(0,30):s;
+            try {
+                String pubdate = rssItem.getPubdate();
+                String t = pubdate.substring(0, rssItem.getPubdate().lastIndexOf(".")).replace("T", " ");
+                rssItem.setDescription(s + "\t\t" + t);
+            }catch (Exception e){
+                rssItem.setDescription(s + "\t\t1970-01-01" );
+                e.printStackTrace();
+            }
             rssFeed.addItem(rssItem);
 
             //Log.i("i", "\u8981\u83b7\u53d6\u7684\u5185\u5bb9\uff1a" + s);

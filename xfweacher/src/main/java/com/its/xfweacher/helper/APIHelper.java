@@ -53,7 +53,7 @@ public class APIHelper {
                     @Override
                     public void onCompleted(Exception e, String result) {
                         try {
-                            Log.e(TAG, result.toString());
+                            Log.e(TAG, "获取code:"+result.toString());
                             getToken(result,after);
                         } catch (Exception er) {
                             er.printStackTrace();
@@ -76,7 +76,7 @@ public class APIHelper {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         try {
-                            Log.e(TAG, result.toString());
+                            Log.e(TAG, "得到token:"+result.toString());
                             String access_token = result.get("access_token").toString().replace("\"", "");
                             SystemUtils.setToken(access_token);
                             if(after!=null)
