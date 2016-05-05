@@ -18,11 +18,11 @@ public class MusicManager extends PreferenceActivity{
 		addPreferencesFromResource(R.xml.music);
 	}
 	/**
-	 * »ñÈ¡ÉèÖÃ±³¾°ÒôÀÖµÄÄ¬ÈÏÊÇtrue
+	 * è·å–è®¾ç½®èƒŒæ™¯éŸ³ä¹çš„é»˜è®¤æ˜¯true
 	 */
 	public static boolean getMusic(Context context){
 		return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(OPT_MUSIC, OPT_MUSIC_DEF);
-		
+
 	}
 	public static void stop(Context context){
 		if(mp!=null){
@@ -32,15 +32,15 @@ public class MusicManager extends PreferenceActivity{
 		}
 	}
 	public static void play(Context context, int resource) {
-		Log.i(TAG, "---------play ----"+context );
+		Log.i(TAG, "---------play ----" + context);
 
-		// Í£Ö¹ÒÑ¾­²¥·ÅµÄÒôÀÖ
+		// åœæ­¢å·²ç»æ’­æ”¾çš„éŸ³ä¹
 		stop(context);
-		// ¿ªÊ¼ÒôÀÖ
+		// å¼€å§‹éŸ³ä¹
 		if (getMusic(context)) {
-			mp = MediaPlayer.create(context, resource);
-			mp.setLooping(true);
-			mp.start();
+			//mp = MediaPlayer.create(context, resource);
+			//mp.setLooping(true);
+			//mp.start();
 		}
 	}
 }

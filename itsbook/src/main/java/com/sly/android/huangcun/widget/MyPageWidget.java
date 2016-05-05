@@ -23,20 +23,20 @@ public class MyPageWidget extends View {
 	DisplayMetrics dm = getResources().getDisplayMetrics();
 	private int mWidth=dm.widthPixels ;
 	private int mHeight=dm.heightPixels ;
-	private int mCornerX = 0; // ÍÏ×§µã¶ÔÓ¦µÄÒ³½Å
+	private int mCornerX = 0; // æ‹–æ‹½ç‚¹å¯¹åº”çš„é¡µè„š
 	private int mCornerY = 0;
 	private Path mPath0;
 	private Path mPath1;
-	Bitmap mCurPageBitmap = null; // µ±Ç°Ò³
+	Bitmap mCurPageBitmap = null; // å½“å‰é¡µ
 	Bitmap mNextPageBitmap = null;
 
-	PointF mTouch = new PointF(); // ÍÏ×§µã
-	PointF mBezierStart1 = new PointF(); // ±´Èû¶ûÇúÏßÆğÊ¼µã
-	PointF mBezierControl1 = new PointF(); // ±´Èû¶ûÇúÏß¿ØÖÆµã
-	PointF mBeziervertex1 = new PointF(); // ±´Èû¶ûÇúÏß¶¥µã
-	PointF mBezierEnd1 = new PointF(); // ±´Èû¶ûÇúÏß½áÊøµã
+	PointF mTouch = new PointF(); // æ‹–æ‹½ç‚¹
+	PointF mBezierStart1 = new PointF(); // è´å¡å°”æ›²çº¿èµ·å§‹ç‚¹
+	PointF mBezierControl1 = new PointF(); // è´å¡å°”æ›²çº¿æ§åˆ¶ç‚¹
+	PointF mBeziervertex1 = new PointF(); // è´å¡å°”æ›²çº¿é¡¶ç‚¹
+	PointF mBezierEnd1 = new PointF(); // è´å¡å°”æ›²çº¿ç»“æŸç‚¹
 
-	PointF mBezierStart2 = new PointF(); // ÁíÒ»Ìõ±´Èû¶ûÇúÏß
+	PointF mBezierStart2 = new PointF(); // å¦ä¸€æ¡è´å¡å°”æ›²çº¿
 	PointF mBezierControl2 = new PointF();
 	PointF mBeziervertex2 = new PointF();
 	PointF mBezierEnd2 = new PointF();
@@ -49,7 +49,7 @@ public class MyPageWidget extends View {
 	Matrix mMatrix;
 	float[] mMatrixArray = { 0, 0, 0, 0, 0, 0, 0, 0, 1.0f };
 
-	boolean mIsRTandLB; // ÊÇ·ñÊôÓÚÓÒÉÏ×óÏÂ
+	boolean mIsRTandLB; // æ˜¯å¦å±äºå³ä¸Šå·¦ä¸‹
 	float mMaxLength = (float) Math.hypot(mWidth,mHeight);
 	int[] mBackShadowColors;
 	int[] mFrontShadowColors;
@@ -84,12 +84,12 @@ public class MyPageWidget extends View {
 		mMatrix = new Matrix();
 		mScroller = new Scroller(getContext());
 
-		mTouch.x = 0.01f; // ²»ÈÃx,yÎª0,·ñÔòÔÚµã¼ÆËãÊ±»áÓĞÎÊÌâ
+		mTouch.x = 0.01f; // ä¸è®©x,yä¸º0,å¦åˆ™åœ¨ç‚¹è®¡ç®—æ—¶ä¼šæœ‰é—®é¢˜
 		mTouch.y = 0.01f;
 	}
 
 	/**
-	 * Author : hmg25 Version: 1.0 Description : ¼ÆËãÍÏ×§µã¶ÔÓ¦µÄÍÏ×§½Å
+	 * Author : hmg25 Version: 1.0 Description : è®¡ç®—æ‹–æ‹½ç‚¹å¯¹åº”çš„æ‹–æ‹½è„š
 	 */
 	public void calcCornerXY(float x, float y) {
 		if (x <= mWidth / 2)
@@ -131,11 +131,11 @@ public class MyPageWidget extends View {
 	}
 
 	/**
-	 * Author : hmg25 Version: 1.0 Description : Çó½âÖ±ÏßP1P2ºÍÖ±ÏßP3P4µÄ½»µã×ø±ê
+	 * Author : hmg25 Version: 1.0 Description : æ±‚è§£ç›´çº¿P1P2å’Œç›´çº¿P3P4çš„äº¤ç‚¹åæ ‡
 	 */
 	public PointF getCross(PointF P1, PointF P2, PointF P3, PointF P4) {
 		PointF CrossP = new PointF();
-		// ¶şÔªº¯ÊıÍ¨Ê½£º y=ax+b
+		// äºŒå…ƒå‡½æ•°é€šå¼ï¼š y=ax+b
 		float a1 = (P2.y - P1.y) / (P2.x - P1.x);
 		float b1 = ((P1.x * P2.y) - (P2.x * P1.y)) / (P1.x - P2.x);
 
@@ -159,8 +159,8 @@ public class MyPageWidget extends View {
 				/ 2;
 		mBezierStart1.y = mCornerY;
 
-		// µ±mBezierStart1.x < 0»òÕßmBezierStart1.x > 480Ê±
-		// Èç¹û¼ÌĞø·­Ò³£¬»á³öÏÖBUG¹ÊÔÚ´ËÏŞÖÆ
+		// å½“mBezierStart1.x < 0æˆ–è€…mBezierStart1.x > 480æ—¶
+		// å¦‚æœç»§ç»­ç¿»é¡µï¼Œä¼šå‡ºç°BUGæ•…åœ¨æ­¤é™åˆ¶
 		dm=new DisplayMetrics();
 
 		if (mTouch.x > 0 && mTouch.x < mWidth) {
@@ -208,8 +208,8 @@ public class MyPageWidget extends View {
 		// + mBezierEnd2.y);
 
 		/*
-		 * mBeziervertex1.x ÍÆµ¼
-		 * ((mBezierStart1.x+mBezierEnd1.x)/2+mBezierControl1.x)/2 »¯¼òµÈ¼ÛÓÚ
+		 * mBeziervertex1.x æ¨å¯¼
+		 * ((mBezierStart1.x+mBezierEnd1.x)/2+mBezierControl1.x)/2 åŒ–ç®€ç­‰ä»·äº
 		 * (mBezierStart1.x+ 2*mBezierControl1.x+mBezierEnd1.x) / 4
 		 */
 		mBeziervertex1.x = (mBezierStart1.x + 2 * mBezierControl1.x + mBezierEnd1.x) / 4;
@@ -291,7 +291,7 @@ public class MyPageWidget extends View {
 	}
 
 	/**
-	 * Author : hmg25 Version: 1.0 Description : ´´½¨ÒõÓ°µÄGradientDrawable
+	 * Author : hmg25 Version: 1.0 Description : åˆ›å»ºé˜´å½±çš„GradientDrawable
 	 */
 	private void createDrawable() {
 		int[] color = { 0x333333, 0xb0333333 };
@@ -336,7 +336,7 @@ public class MyPageWidget extends View {
 	}
 
 	/**
-	 * Author : hmg25 Version: 1.0 Description : »æÖÆ·­ÆğÒ³µÄÒõÓ°
+	 * Author : hmg25 Version: 1.0 Description : ç»˜åˆ¶ç¿»èµ·é¡µçš„é˜´å½±
 	 */
 	public void drawCurrentPageShadow(Canvas canvas) {
 		double degree;
@@ -344,14 +344,14 @@ public class MyPageWidget extends View {
 			degree = Math.PI
 					/ 4
 					- Math.atan2(mBezierControl1.y - mTouch.y, mTouch.x
-							- mBezierControl1.x);
+					- mBezierControl1.x);
 		} else {
 			degree = Math.PI
 					/ 4
 					- Math.atan2(mTouch.y - mBezierControl1.y, mTouch.x
-							- mBezierControl1.x);
+					- mBezierControl1.x);
 		}
-		// ·­ÆğÒ³ÒõÓ°¶¥µãÓëtouchµãµÄ¾àÀë
+		// ç¿»èµ·é¡µé˜´å½±é¡¶ç‚¹ä¸touchç‚¹çš„è·ç¦»
 		double d1 = (float) 25 * 1.414 * Math.cos(degree);
 		double d2 = (float) 25 * 1.414 * Math.sin(degree);
 		float x = (float) (mTouch.x + d1);
@@ -436,7 +436,7 @@ public class MyPageWidget extends View {
 	}
 
 	/**
-	 * Author : hmg25 Version: 1.0 Description : »æÖÆ·­ÆğÒ³±³Ãæ
+	 * Author : hmg25 Version: 1.0 Description : ç»˜åˆ¶ç¿»èµ·é¡µèƒŒé¢
 	 */
 	private void drawCurrentBackArea(Canvas canvas, Bitmap bitmap) {
 		int i = (int) (mBezierStart1.x + mBezierControl1.x) / 2;
@@ -504,8 +504,8 @@ public class MyPageWidget extends View {
 
 	private void startAnimation(int delayMillis) {
 		int dx, dy;
-		// dx Ë®Æ½·½Ïò»¬¶¯µÄ¾àÀë£¬¸ºÖµ»áÊ¹¹ö¶¯Ïò×ó¹ö¶¯
-		// dy ´¹Ö±·½Ïò»¬¶¯µÄ¾àÀë£¬¸ºÖµ»áÊ¹¹ö¶¯ÏòÉÏ¹ö¶¯
+		// dx æ°´å¹³æ–¹å‘æ»‘åŠ¨çš„è·ç¦»ï¼Œè´Ÿå€¼ä¼šä½¿æ»šåŠ¨å‘å·¦æ»šåŠ¨
+		// dy å‚ç›´æ–¹å‘æ»‘åŠ¨çš„è·ç¦»ï¼Œè´Ÿå€¼ä¼šä½¿æ»šåŠ¨å‘ä¸Šæ»šåŠ¨
 		if (mCornerX > 0) {
 			dx = -(int) (mWidth + mTouch.x);
 		} else {
@@ -514,7 +514,7 @@ public class MyPageWidget extends View {
 		if (mCornerY > 0) {
 			dy = (int) (mHeight - mTouch.y);
 		} else {
-			dy = (int) (1 - mTouch.y); // ·ÀÖ¹mTouch.y×îÖÕ±äÎª0
+			dy = (int) (1 - mTouch.y); // é˜²æ­¢mTouch.yæœ€ç»ˆå˜ä¸º0
 		}
 		mScroller.startScroll((int) mTouch.x, (int) mTouch.y, dx, dy,
 				delayMillis);
@@ -533,7 +533,7 @@ public class MyPageWidget extends View {
 	}
 
 	/**
-	 * Author : hmg25 Version: 1.0 Description : ÊÇ·ñ´Ó×ó±ß·­ÏòÓÒ±ß
+	 * Author : hmg25 Version: 1.0 Description : æ˜¯å¦ä»å·¦è¾¹ç¿»å‘å³è¾¹
 	 */
 	public boolean DragToRight() {
 		if (mCornerX > 0)
@@ -546,24 +546,24 @@ public class MyPageWidget extends View {
 	public boolean isbIsBeginSelecting() {
 		return bIsBeginSelecting;
 	}
-	// ¹â±ê¶¨Î»ĞĞ¡¢ÁĞ
+	// å…‰æ ‡å®šä½è¡Œã€åˆ—
 	private int line = 0;
 	private int col = 0;
-	 private class MenuHandler implements MenuItem.OnMenuItemClickListener {
-	        public boolean onMenuItemClick(MenuItem item) {
-	            return onContextMenuItem(item.getItemId());
-	        }
-	    }
-	 private boolean onContextMenuItem(int itemId) {
-			switch (itemId) {
+	private class MenuHandler implements MenuItem.OnMenuItemClickListener {
+		public boolean onMenuItemClick(MenuItem item) {
+			return onContextMenuItem(item.getItemId());
+		}
+	}
+	private boolean onContextMenuItem(int itemId) {
+		switch (itemId) {
 			case C_MENU_BEGIN_SELECTION:
 				bIsBeginSelecting = true;
 				return true;
 
 			default:
 				break;
-			}
-			return false;
 		}
+		return false;
+	}
 
 }

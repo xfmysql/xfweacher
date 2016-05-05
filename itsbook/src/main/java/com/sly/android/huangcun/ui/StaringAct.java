@@ -44,7 +44,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 /**
- * ��Ļ�ֱ���:�����ͺ�
+ * 屏幕分辨率:各种型号
  * hmg25's android Type
  *
  *@author SunLuyao
@@ -52,7 +52,7 @@ import android.widget.Toast;
  */
 public class StaringAct extends Activity implements Serializable{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	/** Called when the activity is first created. */
@@ -76,43 +76,44 @@ public class StaringAct extends Activity implements Serializable{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		AdManager.init(StaringAct.this,"0f34f539f9d030b4","612c3c56a1fab5c1",50,false); 
+		AdManager.init(StaringAct.this,"0f34f539f9d030b4","612c3c56a1fab5c1",50,false);
 		mPageWidget = new MyPageWidget(this);
 		setContentView(mPageWidget);
 		am = ActivityManager.getInstance();
 		am.addActivity(this);
-		AdView adView = new AdView(this); 
+
+		AdView adView = new AdView(this);
 		cp = new ConnectionProvider(this);
-		FrameLayout.LayoutParams params = new 
-		FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT, 
-		FrameLayout.LayoutParams.WRAP_CONTENT); 
-		params.gravity=Gravity.BOTTOM|Gravity.RIGHT;  
-		addContentView(adView, params);  
+		FrameLayout.LayoutParams params = new
+				FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT,
+				FrameLayout.LayoutParams.WRAP_CONTENT);
+		params.gravity=Gravity.BOTTOM|Gravity.RIGHT;
+		addContentView(adView, params);
+
 		dm=new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(dm);    
+		getWindowManager().getDefaultDisplay().getMetrics(dm);
 		int width=dm.widthPixels;
 		int height=dm.heightPixels;
-		mCurPageBitmap = Bitmap.createBitmap(width, height-50, Bitmap.Config.ARGB_8888);//��ǰҳ���С
-		mNextPageBitmap = Bitmap
-				.createBitmap(dm.widthPixels,dm.heightPixels-50, Bitmap.Config.ARGB_8888);//��һҳ
+
+		mCurPageBitmap = Bitmap.createBitmap(width, height-50, Bitmap.Config.ARGB_8888);//当前页面大小
+		mNextPageBitmap = Bitmap.createBitmap(dm.widthPixels,dm.heightPixels-50, Bitmap.Config.ARGB_8888);//下一页
 		mCurPageCanvas = new Canvas(mCurPageBitmap);
 		mNextPageCanvas = new Canvas(mNextPageBitmap);
-		
+
 		pagefactory = new MyBookPageFactory(width,height);
-		pagefactory.setBgBitmap(BitmapFactory.decodeResource(
-				this.getResources(), R.drawable.bookback));
+		pagefactory.setBgBitmap(BitmapFactory.decodeResource(this.getResources(), R.drawable.bookback));
 		try {
 			Bundle bud=this.getIntent().getExtras();
 			id=bud.getInt("id");
-			
+
 			copy(id);
-			bookPath="/data/data/com.sly.android.huangcun.ui/files/"+id+".txt";
+			bookPath="/data/data/com.itouchstudio.itsbook/files/"+id+".txt";
 			pagefactory.openbook(bookPath);
-				pagefactory.onDraw(mCurPageCanvas);
-			
+			pagefactory.onDraw(mCurPageCanvas);
+
 		} catch (IOException e1) {
 			e1.printStackTrace();
-			Toast.makeText(this, "�����鲻����",
+			Toast.makeText(this, "电子书不存在",
 					Toast.LENGTH_SHORT).show();
 		}
 		Intent intent = getIntent();
@@ -135,7 +136,7 @@ public class StaringAct extends Activity implements Serializable{
 								pagefactory.prePage();
 							} catch (IOException e1) {
 								e1.printStackTrace();
-							}						
+							}
 							if(pagefactory.isfirstPage())
 								return false;
 							pagefactory.onDraw(mNextPageCanvas);
@@ -150,8 +151,8 @@ public class StaringAct extends Activity implements Serializable{
 						}
 						mPageWidget.setBitmaps(mCurPageBitmap, mNextPageBitmap);
 					}
-                 
-					 ret = mPageWidget.doTouchEvent(e);
+
+					ret = mPageWidget.doTouchEvent(e);
 					return ret;
 				}
 				return false;
@@ -162,7 +163,7 @@ public class StaringAct extends Activity implements Serializable{
 
 	private void copy(int id) {
 		try {
-			String filePath="/data/data/com.sly.android.huangcun.ui/files/";
+			String filePath="/data/data/com.itouchstudio.itsbook/files/";
 			File file=new File(filePath);
 			if(!file.exists()){
 				file.mkdir();
@@ -171,21 +172,21 @@ public class StaringAct extends Activity implements Serializable{
 			if(!new File(filePath+id+".txt").exists()){
 				InputStream in=assetManage.open(id+".jpg");
 				BufferedInputStream bis = new BufferedInputStream(in);
-				 BufferedOutputStream bos = new BufferedOutputStream(
-				 new FileOutputStream(filePath+id+".txt"));
-				 byte[] buffer = new byte[8192];
-				 int length = 0;
-				 while ((length = (bis.read(buffer))) > 0) {
-				 bos.write(buffer, 0, length);
-				 }
-				 bis.close();
-				 bos.close();
-				 
-			}	
-				 } catch (IOException e) {
-				 e.printStackTrace();
-				 }
-			
+				BufferedOutputStream bos = new BufferedOutputStream(
+						new FileOutputStream(filePath+id+".txt"));
+				byte[] buffer = new byte[8192];
+				int length = 0;
+				while ((length = (bis.read(buffer))) > 0) {
+					bos.write(buffer, 0, length);
+				}
+				bis.close();
+				bos.close();
+
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public String getStringFromFile(String code)
@@ -209,9 +210,9 @@ public class StaringAct extends Activity implements Serializable{
 		}
 		return null;
 	}
-	
-	
-	// ��ȡ�ļ�����
+
+
+	// 读取文件内容
 	public byte[] readFile(String fileName) throws Exception {
 		byte[] result = null;
 		FileInputStream fis = null;
@@ -226,40 +227,40 @@ public class StaringAct extends Activity implements Serializable{
 		}
 		return result;
 	}
-	
+
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, 1, 1, "�����ǩ");
-		menu.add(0, 2, 2, "ѡ����ǩ");
-//		menu.add(0, 3, 3, "��������");
-		menu.add(0, 4, 4, "�����½�");
+		menu.add(0, 1, 1, "添加书签");
+		menu.add(0, 2, 2, "选择书签");
+//		menu.add(0, 3, 3, "背景音乐");
+		menu.add(0, 4, 4, "返回章节");
 		return super.onCreateOptionsMenu(menu);
 	}
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
-		case 1:
-			addBookMark();
-			break;
-		case 2:
-			bookMark();
-			break;
+			case 1:
+				addBookMark();
+				break;
+			case 2:
+				bookMark();
+				break;
 //		case 3:
 //			startActivity(new Intent(this, MusicManager.class));
 //		break;
-		case 3:
-			Builder adb2 = new Builder(StaringAct .this);
-			adb2.setTitle("��Ϣ");
-			adb2.setMessage("���Ҫ�˳���");
-			adb2.setPositiveButton("ȷ��", new OnClickListener() {
-				
-				public void onClick(DialogInterface dialog, int which) {
-					am.exitAllProgress();
-				}
-			});
-			adb2.setNegativeButton("ȡ��", null);
-			adb2.show();
-			break;
-		default:
-			break;
+			case 3:
+				AlertDialog.Builder adb2 = new Builder(StaringAct .this);
+				adb2.setTitle("消息");
+				adb2.setMessage("真的要退出吗？");
+				adb2.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
+					public void onClick(DialogInterface dialog, int which) {
+						am.exitAllProgress();
+					}
+				});
+				adb2.setNegativeButton("取消", null);
+				adb2.show();
+				break;
+			default:
+				break;
 		}
 		return super.onMenuItemSelected(featureId, item);
 	}
@@ -276,20 +277,20 @@ public class StaringAct extends Activity implements Serializable{
 		super.onPause();
 		MusicManager.stop(this);
 	}
-//TODO�����ǩ
+	//TODO添加书签
 	private void addBookMark() {
-		// ��ʼ�����ڽ�����ǩ�����ͼ
-		Log.i(TAG, "-----------------------------��ӿ�ʼ");
+		// 初始化用于接收书签名的视图
+		Log.i(TAG, "-----------------------------添加开始");
 
 		bookEdit = new EditText(this.getBaseContext());
 
-		new Builder(this).setTitle("�����ǩ").setView(bookEdit)
+		new AlertDialog.Builder(this).setTitle("添加书签").setView(bookEdit)
 				.setView(bookEdit)
-				.setPositiveButton("ȷ��", new OnClickListener() {
+				.setPositiveButton("确定", new OnClickListener() {
 
-					
+
 					public void onClick(DialogInterface dialog, int which) {
-						Log.i(TAG, "-----------------------------�����ʼ");
+						Log.i(TAG, "-----------------------------点击开始");
 
 						if (bookEdit.getText().toString() != null
 								&& bookEdit.getText().toString().trim() != "") {
@@ -302,7 +303,7 @@ public class StaringAct extends Activity implements Serializable{
 
 								if (bookMarkName.equals(bm.getBookmarkName())) {
 									Toast.makeText(StaringAct.this,
-											"����ǩ�Ѿ����ڣ���ȡ�������",
+											"此书签已经存在，请取别的名字",
 											Toast.LENGTH_SHORT).show();
 									return;
 								}
@@ -316,25 +317,25 @@ public class StaringAct extends Activity implements Serializable{
 									+ " (bookmarkID,bookmarkName,bookPage,bookName) values("
 									+ bookmarkID + ",'" + bookMarkName + "',"
 									+ page +",'"+bookName1+ "');";
-System.out.println("sql====================="+sql);
+							System.out.println("sql====================="+sql);
 							Log.i(TAG, "------------" + sql);
 							db.execSQL(sql);
 							queryTable(cp, fileNameSingle);
-							
+
 							for (BookMark bm : listBook) {
 								Log.i(TAG, "------------" + bm);
 							}
 						}
 					}
-				}).setNegativeButton("ȡ��", new OnClickListener() {
+				}).setNegativeButton("取消", new OnClickListener() {
 
-					
-					public void onClick(DialogInterface dialog, int which) {
-						Toast.makeText(StaringAct.this, "δ�����ǩ",
-								Toast.LENGTH_SHORT);
 
-					}
-				}).show();
+			public void onClick(DialogInterface dialog, int which) {
+				Toast.makeText(StaringAct.this, "未添加书签",
+						Toast.LENGTH_SHORT);
+
+			}
+		}).show();
 
 	}
 	public void queryTable(ConnectionProvider cp,int fileNameSingle) {
@@ -360,7 +361,7 @@ System.out.println("sql====================="+sql);
 					bm.setBookName(bookName);
 					if (bookName==fileNameSingle)
 						listBook.add(bm);
-					
+
 					if (cursor.isLast()) {
 						break;
 					}
@@ -368,7 +369,7 @@ System.out.println("sql====================="+sql);
 				}
 				Log.i(TAG, "----------------listBook-" + listBook.size());
 			}
-			Log.i(TAG, "-----------------------" + "bookmark��ѯ����");
+			Log.i(TAG, "-----------------------" + "bookmark查询结束");
 
 		} catch (Exception e) {
 
@@ -378,10 +379,10 @@ System.out.println("sql====================="+sql);
 			if (cursor != null) {
 				cursor.close();
 			}
-			Log.i(TAG, "-----------------------" + "bookmark��ѯ�ر�");
+			Log.i(TAG, "-----------------------" + "bookmark查询关闭");
 		}
 	}
-	//TODO �����ǩ
+	//TODO 添加书签
 	String[] books;
 	private void bookMark() {
 		queryTable(cp, fileNameSingle);
@@ -389,13 +390,13 @@ System.out.println("sql====================="+sql);
 		for (int i = 0; i < listBook.size(); i++) {
 			books[i] = listBook.get(i).getBookmarkName();
 		}
-		new Builder(this)
-				.setTitle("��ѡ��")
+		new AlertDialog.Builder(this)
+				.setTitle("单选框")
 				.setIcon(android.R.drawable.ic_dialog_info)
 				.setSingleChoiceItems(books, 0,
-						new OnClickListener() {
+						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog,
-									int which) {
+												int which) {
 								String selectBook = books[which];
 								for (BookMark bm : listBook) {
 									if (bm.getBookmarkName().equals(selectBook)) {
@@ -415,7 +416,7 @@ System.out.println("sql====================="+sql);
 								}
 								dialog.dismiss();
 							}
-						}).setNegativeButton("ȡ��", null).show();
+						}).setNegativeButton("取消", null).show();
 
 	}
 	private void setNewView(int page, int bookmarkID) throws IOException {
@@ -427,7 +428,7 @@ System.out.println("sql====================="+sql);
 		// pagefactory.onDraw(mNextPageCanvas);
 	}
 
-	}
+}
 
 
 

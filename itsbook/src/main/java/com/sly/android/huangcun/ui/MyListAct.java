@@ -22,42 +22,42 @@ import android.widget.SimpleAdapter;
 
 public class MyListAct extends ListActivity implements Serializable {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
-	/*Œƒº˛¡–±Ì*/
-		protected void onCreate(Bundle savedInstanceState){
-			super.onCreate(savedInstanceState);
-			AdManager.init(MyListAct.this,"0f34f539f9d030b4","612c3c56a1fab5c1",50,false); 
-			String[]options=new String[]{"bookico","bookname"};
-			int[]ico=new int[]{R.id.imageico,R.id.textappname};
-			List<Map<String,Object>> items=new ArrayList<Map<String,Object>>();
-			for(int i=0;i<ListViewItems.READ_NAME.length;i++){
-				Map<String,Object>item=new HashMap<String,Object>();
-				item.put("bookico", ListViewItems.READ_ICO[i]);
-				item.put("bookname", ListViewItems.READ_NAME[i]);
-				items.add(item);
-			}
-			SimpleAdapter adapter=new SimpleAdapter(this,items,R.layout.listview,options,ico);
-			setListAdapter(adapter);
-			AdView adView = new AdView(this); 
-	         
-			FrameLayout.LayoutParams params = new 
-			FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT, 
-			FrameLayout.LayoutParams.WRAP_CONTENT); 
-			params.gravity=Gravity.BOTTOM|Gravity.RIGHT;  
-			//Activity  
-			addContentView(adView, params);  
-	}
-		@Override
-		protected void onListItemClick(ListView l, View v, int position, long id) {
-			super.onListItemClick(l, v, position, id);
-			Intent intent = new Intent();
-			intent.putExtra("id", position);
-			Log.i("¥´ÀÕidµƒ÷µ",id+"");
-			System.out.println("–°Àµ√˚◊÷==========="+ListViewItems.READ_NAME[position]);
-			intent.setClass(MyListAct.this, StaringAct.class);
-			startActivity(intent);
+	/*Êñá‰ª∂ÂàóË°®*/
+	protected void onCreate(Bundle savedInstanceState){
+		super.onCreate(savedInstanceState);
+		AdManager.init(MyListAct.this,"0f34f539f9d030b4","612c3c56a1fab5c1",50,false);
+		String[]options=new String[]{"bookico","bookname"};
+		int[]ico=new int[]{R.id.imageico,R.id.textappname};
+		List<Map<String,Object>> items=new ArrayList<Map<String,Object>>();
+		for(int i=0;i<ListViewItems.READ_NAME.length;i++){
+			Map<String,Object>item=new HashMap<String,Object>();
+			item.put("bookico", ListViewItems.READ_ICO[i]);
+			item.put("bookname", ListViewItems.READ_NAME[i]);
+			items.add(item);
 		}
-		
+		SimpleAdapter adapter=new SimpleAdapter(this,items,R.layout.listview,options,ico);
+		setListAdapter(adapter);
+		AdView adView = new AdView(this);
+
+		FrameLayout.LayoutParams params = new
+				FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT,
+				FrameLayout.LayoutParams.WRAP_CONTENT);
+		params.gravity=Gravity.BOTTOM|Gravity.RIGHT;
+		//Activity
+		addContentView(adView, params);
+	}
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		super.onListItemClick(l, v, position, id);
+		Intent intent = new Intent();
+		intent.putExtra("id", position);
+		Log.i("‰º†ÈÄÅidÁöÑÂÄº",id+"");
+		System.out.println("Â∞èËØ¥ÂêçÂ≠ó==========="+ListViewItems.READ_NAME[position]);
+		intent.setClass(MyListAct.this, StaringAct.class);
+		startActivity(intent);
+	}
+
 }

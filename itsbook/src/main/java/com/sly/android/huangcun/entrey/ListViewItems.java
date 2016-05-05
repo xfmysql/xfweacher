@@ -5,6 +5,6 @@ import com.sly.android.huangcun.ui.R;
 
 public class ListViewItems {
 	public static String []READ_NAME=new String[]
-			{"»Ä´åµÚÒ»»°        Ğò","»Ä´åµÚ¶ş»°        ¾ª»ÅÒ¹Àï","»Ä´åµÚÈı»°        ·ÖÁÑ","»Ä´åµÚËÄ»°        Ô­Ò°","»Ä´åµÚÎå»°        ÏàÆ¬ÀïµÄÈË"," »Ä´åµÚÁù»°         ÉîÒ¹µÄÂÓÊ³Õß"," »Ä´åµÚÆß»°         Ñ¡Ôñ"," »Ä´åµÚ°Ë»°         ÎŞÏŞµÄÂÖ»Ø"," »Ä´åµÚ¾Å»°         Áú´óÒ¯", " »Ä´åµÚÊ®»°         ¶¾¾Æ"," »Ä´åµÚÊ®Ò»»°         ÎÒÃÇ²¢²»¹Âµ¥","¹ØÓÚÎÒÃÇ"};
+			{"è’æ‘ç¬¬ä¸€è¯        åº","è’æ‘ç¬¬äºŒè¯        æƒŠæ…Œå¤œé‡Œ","è’æ‘ç¬¬ä¸‰è¯        åˆ†è£‚","è’æ‘ç¬¬å››è¯        åŸé‡","è’æ‘ç¬¬äº”è¯        ç›¸ç‰‡é‡Œçš„äºº"," è’æ‘ç¬¬å…­è¯         æ·±å¤œçš„æ é£Ÿè€…"," è’æ‘ç¬¬ä¸ƒè¯         é€‰æ‹©"," è’æ‘ç¬¬å…«è¯         æ— é™çš„è½®å›"," è’æ‘ç¬¬ä¹è¯         é¾™å¤§çˆ·", " è’æ‘ç¬¬åè¯         æ¯’é…’"," è’æ‘ç¬¬åä¸€è¯         æˆ‘ä»¬å¹¶ä¸å­¤å•","å…³äºæˆ‘ä»¬"};
 	public static int[]READ_ICO=new int[]{R.drawable.ico,R.drawable.ico,R.drawable.ico,R.drawable.ico,R.drawable.ico,R.drawable.ico,R.drawable.ico,R.drawable.ico,R.drawable.ico,R.drawable.ico,R.drawable.ico,R.drawable.ico};
 }

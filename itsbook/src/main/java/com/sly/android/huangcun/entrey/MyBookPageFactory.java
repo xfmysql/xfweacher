@@ -29,15 +29,15 @@ public class MyBookPageFactory {
 	private int page = 0;
 	private Vector<String> m_lines = new Vector<String>();
 
-	private int m_fontSize =39; 
+	private int m_fontSize =39;
 	private int m_textColor = Color.RED;
-	private int m_backColor = 0xffff9e85; // ±³¾°ÑÕÉ«
-	private int marginWidth = 15; // ×óÓÒÓë±ßÔµµÄ¾àÀë
-	private int marginHeight = 50; // ÉÏÏÂÓë±ßÔµµÄ¾àÀë
+	private int m_backColor = 0xffff9e85; // èƒŒæ™¯é¢œè‰²
+	private int marginWidth = 15; // å·¦å³ä¸è¾¹ç¼˜çš„è·ç¦»
+	private int marginHeight = 50; // ä¸Šä¸‹ä¸è¾¹ç¼˜çš„è·ç¦»
 
-	private int mLineCount; // Ã¿Ò³¿ÉÒÔÏÔÊ¾µÄĞĞÊı
-	private float mVisibleHeight; // »æÖÆÄÚÈİµÄ¿í
-	private float mVisibleWidth; // »æÖÆÄÚÈİµÄ¿í
+	private int mLineCount; // æ¯é¡µå¯ä»¥æ˜¾ç¤ºçš„è¡Œæ•°
+	private float mVisibleHeight; // ç»˜åˆ¶å†…å®¹çš„å®½
+	private float mVisibleWidth; // ç»˜åˆ¶å†…å®¹çš„å®½
 	private boolean m_isfirstPage,m_islastPage;
 	private String TAG = "MyBookPageFactory";
 
@@ -53,14 +53,14 @@ public class MyBookPageFactory {
 		mPaint.setColor(m_textColor);
 		mVisibleWidth = mWidth - marginWidth * 2;
 		mVisibleHeight = mHeight - marginHeight * 2;
-		mLineCount = (int) (mVisibleHeight / m_fontSize); // ¿ÉÏÔÊ¾µÄĞĞÊı
+		mLineCount = (int) (mVisibleHeight / m_fontSize); // å¯æ˜¾ç¤ºçš„è¡Œæ•°
 	}
-/**
- * ´ò¿ªÊé¼®
- *  Author :  hmg25
- *  Version:  1.0 
- *  Description :
- */
+	/**
+	 * æ‰“å¼€ä¹¦ç±
+	 *  Author :  hmg25
+	 *  Version:  1.0
+	 *  Description :
+	 */
 	public void openbook(String path) throws IOException {
 		book_file = new File(path);
 		long lLen = book_file.length();
@@ -75,7 +75,7 @@ public class MyBookPageFactory {
 	public int getBeginNum() {
 		return m_mbBufBegin;
 	}
-	
+
 	public void toSelectPage(int page, int begin) throws IOException {
 		if (begin == 0)
 			m_mbBufEnd = begin;
@@ -141,12 +141,12 @@ public class MyBookPageFactory {
 	}
 
 
-	// ¶ÁÈ¡ÉÏÒ»¶ÎÂä
+	// è¯»å–ä¸Šä¸€æ®µè½
 	protected byte[] readParagraphForward(int nFromPos) {
 		int nStart = nFromPos;
 		int i = nStart;
 		byte b0, b1;
-		// ¸ù¾İ±àÂë¸ñÊ½ÅĞ¶Ï»»ĞĞ
+		// æ ¹æ®ç¼–ç æ ¼å¼åˆ¤æ–­æ¢è¡Œ
 		if (m_strCharsetName.equals("UTF-16LE")) {
 			while (i < m_mbBufLen - 1) {
 				b0 = m_mbBuf.get(i++);
@@ -178,12 +178,12 @@ public class MyBookPageFactory {
 		}
 		return buf;
 	}
-//ÏÂÒ»Ò³
+	//ä¸‹ä¸€é¡µ
 	protected Vector<String> pageDown() {
 		String strParagraph = "";
 		Vector<String> lines = new Vector<String>();
 		while (lines.size() < mLineCount && m_mbBufEnd < m_mbBufLen) {
-			byte[] paraBuf = readParagraphForward(m_mbBufEnd); // ¶ÁÈ¡Ò»¸ö¶ÎÂä
+			byte[] paraBuf = readParagraphForward(m_mbBufEnd); // è¯»å–ä¸€ä¸ªæ®µè½
 			m_mbBufEnd += paraBuf.length;
 			try {
 				strParagraph = new String(paraBuf, m_strCharsetName);
@@ -222,7 +222,7 @@ public class MyBookPageFactory {
 		}
 		return lines;
 	}
-//TODO ÉÏÒ»Ò³
+	//TODO ä¸Šä¸€é¡µ
 	protected void pageUp() {
 		if (m_mbBufBegin < 0)
 			m_mbBufBegin = 0;
@@ -298,22 +298,22 @@ public class MyBookPageFactory {
 				c.drawText(strLine, marginWidth, y, mPaint);
 			}
 		}
-		//TODO ÏÔÊ¾·­Ò³Ò³Êı
-		
+		//TODO æ˜¾ç¤ºç¿»é¡µé¡µæ•°
+
 		int fPercent = m_mbBufBegin+3/ m_mbBufLen;
 		System.out.println("fPercent====="+fPercent);
 		System.out.println("fPercent==========="+fPercent);
-		DecimalFormat df = new DecimalFormat("µÚ");
-		String strPercent = df.format(fPercent*6/1000) + "Ò³";
+		DecimalFormat df = new DecimalFormat("ç¬¬");
+		String strPercent = df.format(fPercent*6/1000) + "é¡µ";
 		System.out.println("strPercent======="+strPercent);
-		int nPercentWidth = (int) mPaint.measureText("×îºóÒ»Ò³") + 1;
+		int nPercentWidth = (int) mPaint.measureText("æœ€åä¸€é¡µ") + 1;
 		c.drawText(strPercent, mWidth - nPercentWidth, mHeight - 5, mPaint);
 	}
 
 	public void setBgBitmap(Bitmap BG) {
 		m_book_bg = BG;
 	}
-	
+
 	public boolean isfirstPage() {
 		return m_isfirstPage;
 	}

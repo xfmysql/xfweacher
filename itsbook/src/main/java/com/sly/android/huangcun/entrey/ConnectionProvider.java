@@ -17,9 +17,9 @@ public class ConnectionProvider {
 	public ConnectionProvider(Context ctx) {
 		this.ctx = ctx;
 //		if (db == null) {
-			Log.v("ConnectionProvider", "ctx=!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + ctx.toString());
-			DatabaseHelper dbHelper = new DatabaseHelper(ctx, "ebook", null, 1);
-			db = dbHelper.getWritableDatabase();
+		Log.v("ConnectionProvider", "ctx=!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + ctx.toString());
+		DatabaseHelper dbHelper = new DatabaseHelper(ctx, "ebook", null, 1);
+		db = dbHelper.getWritableDatabase();
 //		}
 	}
 
@@ -32,13 +32,13 @@ public class ConnectionProvider {
 	}
 
 	public boolean isTableExits(String tablename) {
-		boolean result = false;// ±Ì æ≤ª¥Ê‘⁄
+		boolean result = false;// Ë°®Á§∫‰∏çÂ≠òÂú®
 		String str = "select count(*) xcount  from sqlite_master where table='"
 				+ tablename + "'";
 		Cursor cursor = db.rawQuery(str, null);
 		int xcount = cursor.getColumnIndex("xcount");
 		if (xcount != 0) {
-			result = true; // ±Ì¥Ê‘⁄
+			result = true; // Ë°®Â≠òÂú®
 		}
 		if (cursor != null) {
 			cursor.close();

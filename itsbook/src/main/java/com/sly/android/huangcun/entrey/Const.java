@@ -11,16 +11,16 @@ public class Const {
 	public final static byte STATE_READER  =4;
 	public final static byte STATE_TABHOST  =2;
 	public final static byte STATE_FACE =3;
-	
+
 	public static final String[] marknames = { "mark1", "mark2", "mark3",
-		"mark4", "mare5" };
+			"mark4", "mare5" };
 	public static final String[] markPage = { "text1", "text2", "text3",
-		"text4", "text5" };
+			"text4", "text5" };
 	public static final String[] markString = { "str1", "str2", "str3",
-		"str4", "str5",};
+			"str4", "str5",};
 
 	public static int[] markTextId = new int[5];
 //	public static int[] filesId ={R.raw.tudou01,R.raw.tudou02,R.raw.tudou03,R.raw.tudou04,};
-	
-	public final static String[] cagalog={"»Ä´åµÚÒ»»°        Ğò","»Ä´åµÚ¶ş»°        ¾ª»ÅÒ¹Àï","»Ä´åµÚÈı»°        ·ÖÁÑ","»Ä´åµÚËÄ»°        Ô­Ò°","»Ä´åµÚÎå»°        ÏàÆ¬ÀïµÄÈË"," »Ä´åµÚÁù»°         ÉîÒ¹µÄÂÓÊ³Õß","¹ØÓÚÎÒÃÇ"};
+
+	public final static String[] cagalog={"è’æ‘ç¬¬ä¸€è¯        åº","è’æ‘ç¬¬äºŒè¯        æƒŠæ…Œå¤œé‡Œ","è’æ‘ç¬¬ä¸‰è¯        åˆ†è£‚","è’æ‘ç¬¬å››è¯        åŸé‡","è’æ‘ç¬¬äº”è¯        ç›¸ç‰‡é‡Œçš„äºº"," è’æ‘ç¬¬å…­è¯         æ·±å¤œçš„æ é£Ÿè€…","å…³äºæˆ‘ä»¬"};
 }

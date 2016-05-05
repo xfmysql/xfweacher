@@ -13,7 +13,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private String TABLE_NAME = "bookmark";
 
 	public DatabaseHelper(Context context, String name, CursorFactory factory,
-			int version) {
+						  int version) {
 		super(context, "ebook", null,1);
 		ctx = context;
 	}
@@ -28,12 +28,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private void creatNewIDcard(SQLiteDatabase db) {
 		Log.i(TAG, "--------database is create  ---------");
 		db.execSQL("DROP TABLE IF  EXISTS " + TABLE_NAME +";");
-		
+
 		db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
 				+ "bookmarkID" + " Integer," + "bookmarkName" + " TEXT" + ","
 				+ "bookPage" + " TEXT,"+"bookName" + " Integer" + ");");
-		
-		System.out.println("Ω®±Ì”Ôæ‰========================"+"CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
+
+		System.out.println("Âª∫Ë°®ËØ≠Âè•========================"+"CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
 				+ "bookmarkID" + " Integer," + "bookmarkName" + " TEXT" + ","
 				+ "bookPage" + " TEXT,"+"bookName" + " Integer" + ");");
 	}
