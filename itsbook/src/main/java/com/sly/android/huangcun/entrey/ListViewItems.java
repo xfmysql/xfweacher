@@ -1,7 +1,7 @@
 package com.sly.android.huangcun.entrey;
 
-import com.sly.android.huangcun.ui.R;
 
+import com.itouchstudio.itsbook.R;
 
 public class ListViewItems {
 	public static String []READ_NAME=new String[]

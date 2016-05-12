@@ -9,6 +9,8 @@ import java.util.Map;
 
 import net.youmi.android.AdManager;
 import net.youmi.android.AdView;
+
+import com.itouchstudio.itsbook.R;
 import com.sly.android.huangcun.entrey.ListViewItems;
 import android.app.ListActivity;
 import android.content.Intent;

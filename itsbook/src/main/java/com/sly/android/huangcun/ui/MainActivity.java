@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.itouchstudio.itsbook.R;
+
 public class MainActivity extends Activity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {

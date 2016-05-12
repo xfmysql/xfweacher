@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import net.youmi.android.AdManager;
 import net.youmi.android.AdView;
+
+import com.itouchstudio.itsbook.R;
 import com.sly.android.huangcun.entrey.BookMark;
 import com.sly.android.huangcun.entrey.ConnectionProvider;
 import com.sly.android.huangcun.entrey.MyBookPageFactory;

@@ -7,6 +7,8 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.itouchstudio.itsbook.R;
+
 public class MusicManager extends PreferenceActivity{
 	private static final String OPT_MUSIC="music";
 	private static final boolean OPT_MUSIC_DEF=true;
