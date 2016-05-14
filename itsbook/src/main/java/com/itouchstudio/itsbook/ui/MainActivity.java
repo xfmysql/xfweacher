@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.itouchstudio.itsbook.R;
+import com.itouchstudio.itsbook.entity.NextPage;
 import com.itouchstudio.itsbook.util.PreferencesHelper;
 import com.itouchstudio.itsbook.view.FlipperLayout;
 
@@ -23,17 +24,18 @@ public class MainActivity extends Activity implements OnClickListener, FlipperLa
 	private String text = "";
 	private int textLenght = 0;
 
-	private static final int COUNT = 400;
+
 
 	//本页开始
 	private int currentTopEndIndex = 0;
-	//本页结束位置
-	private int currentShowEndIndex = 0;
+
 	//下一页结束位置
-	private int currentBottomEndIndex = 0;
+	private int nextEndIndex = 0;
 
 	private static final String readNumberKey = "readnumber";
+	private static final String readChaperKey = "readchapter";
 
+	NextPage nextpage = null;
 	private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			//打开的时候默认读取
@@ -45,56 +47,47 @@ public class MainActivity extends Activity implements OnClickListener, FlipperLa
 
 			textLenght = text.length();
 			System.out.println("----textLenght----->" + textLenght);
+			int hadReadStart = PreferencesHelper.GetInt(readNumberKey);
+			Log.e(TAG, hadReadStart + "--已经读了--" + textLenght);
 
-			TextView textView = (TextView) view1.findViewById(R.id.textview);
-			int hadRead = PreferencesHelper.GetInt(readNumberKey);
-			Log.e(TAG,hadRead+"--已经读了--"+textLenght);
-			TextView txtNumber = (TextView) view1.findViewById(R.id.txtNumber);
-			txtNumber.setText((hadRead/COUNT+1)+"/"+textLenght/COUNT);
-			if(hadRead>0){//上次有阅读
-				if (textLenght > hadRead) {
-					String page = text.subSequence(hadRead, hadRead+COUNT).toString();
-					textView.setText(page);
+			if(hadReadStart>0){//上次有阅读
+				if (textLenght > hadReadStart) {
+					showPage(view1, hadReadStart);
 
-					textView = (TextView) view2.findViewById(R.id.textview);//第二页
-					txtNumber = (TextView) view2.findViewById(R.id.txtNumber);
-					if (textLenght > (hadRead << 1)) {//有第二页
-						page = text.subSequence(hadRead+COUNT, hadRead + COUNT*2 ).toString();
-						textView.setText(page);
-						txtNumber.setText(((hadRead+ COUNT)/COUNT+1)+"/"+textLenght/COUNT);
-						currentShowEndIndex = hadRead + COUNT;
-						currentBottomEndIndex = hadRead + COUNT*2 ;
-						Log.e(TAG,"-开始->" + currentTopEndIndex + "-第二页开始->" + currentShowEndIndex + "--第二页结束-->" + currentBottomEndIndex);
-					} else {
-						textView.setText(text.subSequence(COUNT, textLenght));
-						currentShowEndIndex = textLenght;
-						currentBottomEndIndex = textLenght;
+					if (textLenght > ( hadReadStart + NextPage.COUNT << 1)) {//有第2页
+						showPage(view2,hadReadStart + NextPage.COUNT);
+						nextpage.startIndex = hadReadStart + NextPage.COUNT;
+						nextpage.endIndex = hadReadStart + NextPage.COUNT*2 ;
+					} else { //没有下一页，下一章
+						nextpage.nextChapter++;
+						new ReadingThread().start();
+						showPage(view2,0);
+						nextpage.startIndex = 0;
+						nextpage.endIndex  = NextPage.COUNT;
 					}
 				} else {
-					textView.setText(text.subSequence(0, textLenght));
-					currentShowEndIndex = textLenght;
-					currentBottomEndIndex = textLenght;
+					Log.e(TAG,"这里怎么进来的");
+					nextpage.nextChapter++;
+					new ReadingThread().start();
+					nextEndIndex = NextPage.COUNT;
+					showPage(view1,nextEndIndex);
 				}
 
-			}else {
-				if (textLenght > COUNT) {
-					textView.setText(text.subSequence(0, COUNT));//第一页
-					textView = (TextView) view2.findViewById(R.id.textview);
-					txtNumber = (TextView) view2.findViewById(R.id.txtNumber);
-					if (textLenght > (COUNT << 1)) {//有第二页 <<1等于 *2
-						textView.setText(text.subSequence(COUNT, COUNT * 2));//第二页
-						txtNumber.setText((COUNT/COUNT+1)+"/"+textLenght/COUNT);
-						currentShowEndIndex = COUNT;
-						currentBottomEndIndex = COUNT << 1;
-					} else {
-						textView.setText(text.subSequence(COUNT, textLenght));
-						currentShowEndIndex = textLenght;
-						currentBottomEndIndex = textLenght;
+			}else {//第一次读
+				if (textLenght > NextPage.COUNT) { //有第二页
+					showPage(view1,0);
+					if (textLenght > (NextPage.COUNT << 1)) {//有第2页 <<1等于 *2
+						showPage(view2, NextPage.COUNT);
+						nextpage.startIndex = NextPage.COUNT;
+						nextpage.endIndex = NextPage.COUNT << 1;
+					} else { //没有第3页,取到结尾
+						showPage(view2, NextPage.COUNT);
+						nextpage.startIndex = NextPage.COUNT;
+						nextpage.endIndex = textLenght;
+						//new ReadingThread().start();
 					}
-				} else {
-					textView.setText(text.subSequence(0, textLenght));
-					currentShowEndIndex = textLenght;
-					currentBottomEndIndex = textLenght;
+				} else { //小于一页
+					showPage(view1, 0);
 				}
 			}
 
@@ -105,13 +98,20 @@ public class MainActivity extends Activity implements OnClickListener, FlipperLa
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		nextpage = new NextPage();
+
+		int _chapter = PreferencesHelper.GetInt(readChaperKey);
+		if(_chapter>0)
+			nextpage.nextChapter = _chapter;
 		new ReadingThread().start();
+		handler.sendEmptyMessage(0);
 	}
 
 	@Override
 	public void onClick(View v) {
 
 	}
+
 
 	/**
 	 * 新建第三页
@@ -123,71 +123,86 @@ public class MainActivity extends Activity implements OnClickListener, FlipperLa
 	public View createView(final int direction) {
 
 		String txt = "";
-		int currentPage = 0;
-		if (direction == FlipperLayout.TouchListener.MOVE_TO_LEFT) {
-			currentTopEndIndex = currentShowEndIndex;
-			final int nextIndex = currentBottomEndIndex + COUNT;
-			currentShowEndIndex = currentBottomEndIndex;
-			if (textLenght > nextIndex) { //第一页
-				txt = text.substring(currentBottomEndIndex, nextIndex);
-				currentBottomEndIndex = nextIndex;
-			} else {
-				txt = text.substring(currentBottomEndIndex, textLenght);
-				currentBottomEndIndex = textLenght;
-			}
-			currentPage = currentShowEndIndex/COUNT+1;
-		} else {
-			currentBottomEndIndex = currentShowEndIndex;
-			currentShowEndIndex = currentTopEndIndex;
-			currentTopEndIndex = currentTopEndIndex - COUNT;
-			txt = text.substring(currentTopEndIndex - COUNT, currentTopEndIndex);
-			currentPage = currentShowEndIndex/COUNT;
-		}
-
-
 		View view = LayoutInflater.from(this).inflate(R.layout.view_new, null);
-		TextView textView = (TextView) view.findViewById(R.id.textview);
-		textView.setText(txt + "\n" +currentPage);
-		PreferencesHelper.putIntValue(readNumberKey, currentTopEndIndex);
-		TextView txtNumber = (TextView) view.findViewById(R.id.txtNumber);
-		txtNumber.setText(currentPage+"/"+textLenght/COUNT);
-
-		System.out.println(currentPage+"-top->" + currentTopEndIndex + "-show->" + currentShowEndIndex + "--bottom-->" + currentBottomEndIndex);
+//		if (direction == FlipperLayout.TouchListener.MOVE_TO_LEFT) {
+//			currenStartIndex = nextpage.startIndex;//开始
+//			final int nextIndex = nextEndIndex + nextpage.COUNT;//结束
+//			nextStartIndex = nextEndIndex;//下次开始
+//			if (textLenght > nextIndex) { //第一页
+//				showPage(view,nextEndIndex);
+//				nextEndIndex = nextIndex;
+//			} else {
+//				//nextEndIndex = textLenght;
+//				//重新读取
+//				nextpage.nextChapter++;
+//				new ReadingThread().start();
+//				currentTopEndIndex = 0;
+//				nextEndIndex = COUNT;
+//				showPage(view,nextEndIndex);
+//
+//			}
+//
+//		} else {
+//			nextEndIndex = nextStartIndex;
+//			nextStartIndex = currentTopEndIndex;
+//			currentTopEndIndex = currentTopEndIndex - nextpage.COUNT;
+//			showPage(view,currentTopEndIndex - COUNT);
+//		}
+//
+//		PreferencesHelper.putIntValue(readChaperKey, nextChapter);
+//		PreferencesHelper.putIntValue(readNumberKey, currentTopEndIndex);
+//		Log.e(TAG,"-top->" + currentTopEndIndex + "-show->" + nextStartIndex + "--bottom-->" + nextEndIndex);
 		return view;
+	}
+
+
+	void showPage(View view,int start){
+		TextView textView = (TextView) view.findViewById(R.id.textview);
+		String page = "";
+		if((start + NextPage.COUNT)<textLenght){
+			page = text.subSequence(start, start + NextPage.COUNT).toString();
+		}
+		else
+			page = text.subSequence(start,textLenght).toString();
+		textView.setText(page);
+
+		TextView txtNumber = (TextView) view.findViewById(R.id.txtNumber);
+		txtNumber.setText((start / NextPage.COUNT + 1) + "/" + textLenght / NextPage.COUNT);
+
 	}
 
 	@Override
 	public boolean whetherHasPreviousPage() {
-		return currentShowEndIndex > COUNT;
+		return nextpage.startIndex > nextpage.COUNT;
 	}
 
 	@Override
 	public boolean whetherHasNextPage() {
-		return currentShowEndIndex < textLenght;
+		return nextpage.startIndex < textLenght;
 	}
 
 	@Override
 	public boolean currentIsFirstPage() {
-		boolean should = currentTopEndIndex > COUNT;
+		boolean should = currentTopEndIndex > nextpage.COUNT;
 		if (!should) {
-			currentBottomEndIndex = currentShowEndIndex;
-			currentShowEndIndex = currentTopEndIndex;
-			currentTopEndIndex = currentTopEndIndex - COUNT;
+			nextEndIndex = nextpage.startIndex;
+			nextpage.startIndex = nextpage.endIndex;
+			currentTopEndIndex = currentTopEndIndex - nextpage.COUNT;
 		}
 		return should;
 	}
 
 	@Override
 	public boolean currentIsLastPage() {
-		boolean should = currentBottomEndIndex < textLenght;
+		boolean should = nextEndIndex < textLenght;
 		if (!should) {
-			currentTopEndIndex = currentShowEndIndex;
-			final int nextIndex = currentBottomEndIndex + COUNT;
-			currentShowEndIndex = currentBottomEndIndex;
+			currentTopEndIndex = nextpage.startIndex;
+			final int nextIndex = nextEndIndex + nextpage.COUNT;
+			nextpage.startIndex = nextEndIndex;
 			if (textLenght > nextIndex) {
-				currentBottomEndIndex = nextIndex;
+				nextEndIndex = nextIndex;
 			} else {
-				currentBottomEndIndex = textLenght;
+				nextEndIndex = textLenght;
 			}
 		}
 		return should;
@@ -198,7 +213,8 @@ public class MainActivity extends Activity implements OnClickListener, FlipperLa
 			AssetManager am = getAssets();
 			InputStream response;
 			try {
-				response = am.open("text.txt");
+				Log.e(TAG,nextpage.nextChapter+"第几章");
+				response = am.open(nextpage.nextChapter+".txt");
 				if (response != null) {
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
 					int i = -1;
@@ -208,7 +224,7 @@ public class MainActivity extends Activity implements OnClickListener, FlipperLa
 					text = new String(baos.toByteArray(), "UTF-8");//UTF-8
 					baos.close();
 					response.close();
-					handler.sendEmptyMessage(0);
+
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

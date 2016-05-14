@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/text_show_linear" android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <ScrollView android:id="@+id/text_show_scroll"
+        android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <com.itouchstudio.itsbook.view.SwanTextView
+            android:id="@+id/text_show" android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:scrollbars="none">
+        </com.itouchstudio.itsbook.view.SwanTextView>
+    </ScrollView>
+</LinearLayout> 
