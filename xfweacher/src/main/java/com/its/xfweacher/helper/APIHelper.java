@@ -53,6 +53,7 @@ public class APIHelper {
                     @Override
                     public void onCompleted(Exception e, String result) {
                         try {
+                            //http://oauth.itouchstudio.com/authorize.php?client_id=xfweather&response_type=code&accept=true&state=c39af7d864dfac92478b56a5989f3102
                             Log.e(TAG, "获取code:"+result.toString());
                             getToken(result,after);
                         } catch (Exception er) {

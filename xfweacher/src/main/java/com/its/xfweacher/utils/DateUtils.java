@@ -21,10 +21,10 @@ public class DateUtils {
         return null;
     }
 
-    public static String Timestamp2String(long times){
+    public static String Timestamp2String(long times,String format){
         Timestamp ts = new Timestamp(times);
         String tsStr = "";
-        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateFormat sdf = new SimpleDateFormat(format);
         try {
             //方法一
             tsStr = sdf.format(ts);

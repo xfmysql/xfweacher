@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.its.xfweacher.R;
-import com.its.xfweacher.entity.Constants;
 import com.its.xfweacher.helper.APIHelper;
 import com.its.xfweacher.json.entity.RssFeed;
 import com.its.xfweacher.json.entity.RssItem;
