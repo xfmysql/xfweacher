@@ -37,13 +37,17 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 /**
  * 屏幕分辨率:各种型号
@@ -78,19 +82,36 @@ public class StaringAct extends Activity implements Serializable{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		AdManager.init(StaringAct.this,"0f34f539f9d030b4","612c3c56a1fab5c1",50,false);
+		AdManager.init(StaringAct.this, "0f34f539f9d030b4", "612c3c56a1fab5c1", 50, false);
 		mPageWidget = new MyPageWidget(this);
 		setContentView(mPageWidget);
 		am = ActivityManager.getInstance();
 		am.addActivity(this);
-
-		AdView adView = new AdView(this);
 		cp = new ConnectionProvider(this);
+
+		//AdView adView = new AdView(this);
+		LinearLayout adView =
+				(LinearLayout) LayoutInflater.from(this).inflate(R.layout.ui_bookmark, null);
 		FrameLayout.LayoutParams params = new
 				FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT,
 				FrameLayout.LayoutParams.WRAP_CONTENT);
 		params.gravity=Gravity.BOTTOM|Gravity.RIGHT;
 		addContentView(adView, params);
+		Button btnAdd = (Button)adView.findViewById(R.id.button);
+		btnAdd.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				addBookMark();
+			}
+		});
+
+		Button btnSelect = (Button)adView.findViewById(R.id.btnSelect);
+		btnSelect.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				bookMark();
+			}
+		});
 
 		dm=new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -126,10 +147,12 @@ public class StaringAct extends Activity implements Serializable{
 
 		mPageWidget.setOnTouchListener(new OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent e) {
+
 				boolean ret=false;
 				if (v == mPageWidget) {
 					if (e.getAction() == MotionEvent.ACTION_DOWN) {
 						mPageWidget.abortAnimation();
+
 						mPageWidget.calcCornerXY(e.getX(), e.getY());
 
 						pagefactory.onDraw(mCurPageCanvas);
@@ -155,6 +178,7 @@ public class StaringAct extends Activity implements Serializable{
 					}
 
 					ret = mPageWidget.doTouchEvent(e);
+					//mPageWidget.startAnimation(AnimationUtils.loadAnimation(StaringAct.this, R.anim.push_right_in));
 					return ret;
 				}
 				return false;

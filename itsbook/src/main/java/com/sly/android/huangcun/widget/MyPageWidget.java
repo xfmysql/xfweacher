@@ -516,8 +516,7 @@ public class MyPageWidget extends View {
 		} else {
 			dy = (int) (1 - mTouch.y); // 防止mTouch.y最终变为0
 		}
-		mScroller.startScroll((int) mTouch.x, (int) mTouch.y, dx, dy,
-				delayMillis);
+		mScroller.startScroll((int) mTouch.x, (int) mTouch.y, dx, dy,delayMillis);
 	}
 
 	public void abortAnimation() {
