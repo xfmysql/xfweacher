@@ -75,7 +75,7 @@ public class TxtReaderActivity extends Activity  implements
         char[] buf = new char[1024 * 2];
         while (true) {
             if (mCurBottom == mScrollView.getScrollY()) {
-                Log.d(LOG_TAG, "curBtm:" + mCurBottom + " scroll:"+ mScrollView.getScrollY());
+                Log.d(LOG_TAG, "getScrollY:" + mCurBottom + " scroll:"+ mScrollView.getScrollY());
 
                 mCurBottom = -1;
                 mNum++;

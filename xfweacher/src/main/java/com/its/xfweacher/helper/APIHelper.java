@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.its.xfweacher.AppContext;
+import com.its.xfweacher.dbentity.WeatherItem;
 import com.its.xfweacher.entity.Weather;
 import com.its.xfweacher.json.entity.RssFeed;
 import com.its.xfweacher.utils.Constants;
@@ -92,7 +93,7 @@ public class APIHelper {
 
     public interface WeatherReflush
     {
-        void onReflush(List<Weather> list);
+        void onReflush();
     }
     private static WeatherReflush weatherReflush;
     public static void setWeatherReflush(WeatherReflush pWeatherReflush){
@@ -114,11 +115,14 @@ public class APIHelper {
                             Log.e(TAG,result.toString());
                             String s = gson.toJson(result.getAsJsonArray("data"));
 
-                            List<Weather> wlist = gson.fromJson(s, new TypeToken<List<Weather>>() {
+                            List<WeatherItem> wlist = gson.fromJson(s, new TypeToken<List<WeatherItem>>() {
                             }.getType());
 
+                            //写入
+                            DbControl.weatherDao.addAll(wlist);
+
                             if(weatherReflush!=null)//回调
-                                weatherReflush.onReflush(wlist);
+                                weatherReflush.onReflush();
 //                            for(Weather w :wlist)
 //                                Log.e(TAG,w.getWeatherdate()+","+w.getPm25()+","+w.getTemperature()+","+w.getWeatherstr()+","+w.getWind()+"\n\r");
 

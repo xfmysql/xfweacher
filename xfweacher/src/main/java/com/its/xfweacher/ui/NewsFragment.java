@@ -20,6 +20,7 @@ import com.its.xfweacher.R;
 import com.its.xfweacher.helper.APIHelper;
 import com.its.xfweacher.json.entity.RssFeed;
 import com.its.xfweacher.json.entity.RssItem;
+import com.its.xfweacher.utils.Constants;
 
 import org.xml.sax.SAXException;
 

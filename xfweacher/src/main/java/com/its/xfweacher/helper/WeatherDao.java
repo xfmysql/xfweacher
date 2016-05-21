@@ -51,7 +51,7 @@ public class WeatherDao {
         if(list == null || list.size() <= 0) return false;
         for (WeatherItem albumInfo : list){
             try {
-                dao.create(albumInfo);
+                dao.createOrUpdate(albumInfo);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -76,9 +76,10 @@ public class WeatherDao {
             return false;
         }
     }
-    public List<WeatherItem> getAll(){
+    public List<WeatherItem> getListToday(){
         try {
             QueryBuilder builder = dao.queryBuilder();
+            builder.where().ge("addtime", Integer.parseInt(DateUtils.Timestamp2String(new Date().getTime()/1000, "yyyyMMdd")));
             return dao.query(builder.prepare());
         } catch (SQLException e) {
             e.printStackTrace();

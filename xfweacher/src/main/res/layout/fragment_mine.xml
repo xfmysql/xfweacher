@@ -10,6 +10,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="提醒Fragment"
-    />
+        android:id="@+id/txtDeviceID" />
 
 </LinearLayout>

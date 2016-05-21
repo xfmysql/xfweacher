@@ -11,12 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.its.xfweacher.R;
+import com.its.xfweacher.dbentity.WeatherItem;
+import com.its.xfweacher.entity.Weather;
 import com.its.xfweacher.helper.APIHelper;
+import com.its.xfweacher.helper.DbControl;
 import com.its.xfweacher.helper.GetTokenItf;
-import com.its.xfweacher.helper.WeatherAsyncTask;
-import com.its.xfweacher.json.entity.Result;
-import com.its.xfweacher.json.entity.Weather;
-import com.its.xfweacher.json.entity.Weather_data;
 import com.its.xfweacher.utils.DateUtils;
 import com.its.xfweacher.utils.SystemUtils;
 
@@ -50,6 +49,14 @@ public class WeacherFragment extends Fragment implements APIHelper.WeatherReflus
 	private TextView tvwind3;
 	private TextView tvtemper3;
 	SwipeRefreshLayout mSwipeRefreshLayout;
+
+	/**
+	 * 先调用onCreate，在调用这里
+	 * @param inflater
+	 * @param container
+	 * @param savedInstanceState
+	 * @return
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -123,6 +130,9 @@ public class WeacherFragment extends Fragment implements APIHelper.WeatherReflus
 				mSwipeRefreshLayout.setRefreshing(false);
 			}
 		}, 3000);
+
+		APIHelper.setWeatherReflush(this);//回调,要在创建ui之后，
+		onReflush();
 		return view;
 	}
 	@Override
@@ -136,11 +146,7 @@ public class WeacherFragment extends Fragment implements APIHelper.WeatherReflus
 			e.printStackTrace();
 		}
 
-		APIHelper.setWeatherReflush(this);//回调
-		String token = SystemUtils.getToken();
-		if(!TextUtils.isEmpty(token)) {
-			APIHelper.getWeather(token);
-		}
+
 	}
 
 	@Override
@@ -149,13 +155,15 @@ public class WeacherFragment extends Fragment implements APIHelper.WeatherReflus
 		super.onResume();
 	}
 	@Override
-	public void onReflush(List<com.its.xfweacher.entity.Weather> pList) {
-		for(com.its.xfweacher.entity.Weather w :pList)
-			Log.e(TAG,w.getWeatherdate()+","+w.getPm25()+","+w.getTemperature()+","+w.getWeatherstr()+","+w.getWind()+"\n\r");
-
-		com.its.xfweacher.entity.Weather w = pList.get(0);
-		txtLoaction.setText("");
-		String date = DateUtils.Timestamp2String(w.getAddtime());
+	public void onReflush() {
+		List<WeatherItem> pList = DbControl.weatherDao.getListToday();
+		for(WeatherItem w : pList) {
+			Log.e(TAG, w.weatherdate + "," + w.pm25 + "," + w.temperature + "," + w.weatherstr+ "," + w.wind + "\n\r");
+		}
+		if(pList.size()<=0) return;
+		Weather w =  pList.get(0).tWeacher();
+		//txtLoaction.setText("");
+		String date = DateUtils.Timestamp2String(w.getAddtime(),"yyyy-MM-dd");
 		txtTime.setText(date);
 
 		//
@@ -171,7 +179,7 @@ public class WeacherFragment extends Fragment implements APIHelper.WeatherReflus
 		tvwind1.setText(w.getWind());
 		tvtemper1.setText(w.getTemperature());
 
-		w = pList.get(1);
+		w = pList.get(1).tWeacher();
 		tvtemper2.setText(w.getTemperature());
 		//ivpic21.setImageBitmap(w.getDayPicture());
 		//ivpic22.setImageBitmap(w.getNightPicture());
@@ -180,7 +188,7 @@ public class WeacherFragment extends Fragment implements APIHelper.WeatherReflus
 		tvwind2.setText(w.getWind());
 		tvtemper2.setText(w.getTemperature());
 
-		w = pList.get(2);
+		w = pList.get(2).tWeacher();
 		tvtemper3.setText(w.getTemperature());
 		//ivpic31.setImageBitmap(wa.getDayPicture());
 		//ivpic32.setImageBitmap(wa.getNightPicture());

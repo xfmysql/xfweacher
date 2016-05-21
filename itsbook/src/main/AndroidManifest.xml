@@ -22,7 +22,7 @@ android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
         <meta-data android:name="YOUMI_CHANNEL" android:value="10010"></meta-data>
         
         <activity
-            android:name="com.sly.android.huangcun.ui.MainActivity"
+            android:name=".ui.TxtReaderActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:label="@string/app_name" >
             <intent-filter>

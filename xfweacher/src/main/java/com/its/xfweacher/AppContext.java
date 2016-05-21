@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import com.its.xfweacher.helper.APIHelper;
 import com.its.xfweacher.helper.DbControl;
 import com.its.xfweacher.helper.DbHelper;
+import com.its.xfweacher.helper.GetTokenItf;
 import com.its.xfweacher.ui.MainActivity;
 import com.its.xfweacher.utils.Constants;
 import com.its.xfweacher.utils.SystemUtils;
@@ -19,7 +20,7 @@ import com.its.xfweacher.utils.SystemUtils;
  * 全局应用程序类：用于保存和调用全局应用配置及访问网络数据
  * Created by Ender on 2015/11/22.
  */
-public class AppContext extends Application {
+public class AppContext extends Application implements GetTokenItf {
     private static AppContext appContext;
     private static final String TAG = AppContext.class.getName();
     static SharedPreferences sharedPreferences;
@@ -40,12 +41,12 @@ public class AppContext extends Application {
         String token = SystemUtils.getToken();
         if(TextUtils.isEmpty(token))
         {
-            APIHelper.getTokenCode(null);
+            APIHelper.getTokenCode(this);
         }
         else {  //已结获取过token ,超过token过期时间重新获取
             String reflushTime = SystemUtils.getTokenReflushTime();
             if ((System.currentTimeMillis() / 1000 - Long.parseLong(reflushTime)) > 3600) {
-                APIHelper.getTokenCode(null);
+                APIHelper.getTokenCode(this);
             }
         }
         //endregion
@@ -53,6 +54,7 @@ public class AppContext extends Application {
         if(!getBooleanPreferences(Constants.Key_AppInit))
             DbHelper.getHelper(this).init();
         DbControl.Initial(this);
+
     }
 
 
@@ -116,6 +118,14 @@ public class AppContext extends Application {
 
     public static void setIntPreferences(String key,int value) {
         sharedPreferences.edit().putInt(key, value).commit();
+    }
+
+    @Override
+    public void AfterGet() {
+        String token = SystemUtils.getToken();
+        if(!TextUtils.isEmpty(token)) {
+            APIHelper.getWeather(token);
+        }
     }
 
     //endregion
