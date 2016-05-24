@@ -18,7 +18,7 @@
         android:textSize="16sp"
         android:visibility="visible" />
 
-    <View
+        <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:background="#FFFF00"
@@ -27,10 +27,4 @@
         android:visibility="visible" />
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1/1"
-        android:id="@+id/txtNumber"
-        android:layout_gravity="center_horizontal|bottom" />
 </FrameLayout>

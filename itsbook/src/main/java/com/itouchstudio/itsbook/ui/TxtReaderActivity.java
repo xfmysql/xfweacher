@@ -74,15 +74,15 @@ public class TxtReaderActivity extends Activity  implements
         StringBuilder sb = new StringBuilder();
         char[] buf = new char[1024 * 2];
         while (true) {
-            if (mCurBottom == mScrollView.getScrollY()) {
-                Log.d(LOG_TAG, "getScrollY:" + mCurBottom + " scroll:"+ mScrollView.getScrollY());
 
+            if (mCurBottom == mScrollView.getScrollY()) {
+                Log.e(LOG_TAG, "getScrollY:" + mCurBottom + " scroll:" + mScrollView.getScrollY());
                 mCurBottom = -1;
                 mNum++;
-
+                Log.e(LOG_TAG, "mNum="+mNum);
                 if (mNum % 2 == 0) {
                     mContinueRead = true;
-                    Log.d(LOG_TAG, "YES");
+                    Log.e(LOG_TAG, "mNum/2=0="+mNum);
                 }
             }
 
@@ -133,9 +133,14 @@ public class TxtReaderActivity extends Activity  implements
         }
     }
 
+    /**
+     * 显示文本之前
+     * @param bottom
+     */
     @Override
     public void onPreOnDraw(int bottom) {
         mCurBottom = bottom - mScrollView.getHeight();
+        Log.e(LOG_TAG, "onPreOnDraw(bottom:" + bottom + " getHeight:" + mScrollView.getHeight()+" mCurBottom:"+mCurBottom);
 
         if (mHaveNewText && !TextUtils.isEmpty(mStringShow)) {
             mHaveNewText = false;
