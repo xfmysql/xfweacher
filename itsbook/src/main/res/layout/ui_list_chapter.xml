@@ -6,13 +6,13 @@
     <TextView
         android:id="@+id/textview"
         android:layout_width="fill_parent"
-        android:layout_height="720dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1.0"
         android:background="#666666"
-        android:gravity="center"
-        android:text="新建的View"
+        android:text="内容"
         android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:visibility="visible" />
+        android:textSize="20dp"
+        android:visibility="visible"
+        android:padding="10dp" />
 
 </RelativeLayout>
