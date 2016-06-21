@@ -27,19 +27,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
+ * 一次载入3章
  * 如果有一页，要加入
  * 如果有下一页，要加入
  */
-public class ListChapterActivity extends Activity  {
+public class ListChapterActivity extends Activity implements Observer {
     final String TAG = ListChapterActivity.this.getClass().getName();
     ListView mListView;
     MyAdapter mListViewAdapter;
     int nextChapter = 1;
 
-    private static final String readNumberKey = "readnumber";
-    private static final String readChaperKey = "readchapter";
+    public static final String readNumberKey = "readnumber";
+    public static final String readChaperKey = "readchapter";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +53,7 @@ public class ListChapterActivity extends Activity  {
 
         mListViewAdapter = new MyAdapter(this,null);
         mListView.setAdapter(mListViewAdapter);
+        //region setlistener
         mListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
@@ -80,7 +84,7 @@ public class ListChapterActivity extends Activity  {
                     Log.e(TAG, "onScrollStateChanged");
                     //加载数据代码，此处省略了
                     nextChapter++;
-                    new ReadingThread().start();
+                    //new ReadingThread().start();
 
                 }
                 // 不滚动时保存当前滚动到的位置
@@ -103,56 +107,24 @@ public class ListChapterActivity extends Activity  {
                 lastItemIndex = firstVisibleItem + visibleItemCount - 1;
             }
         });
+        //endregion
         int hadChapter = PreferencesHelper.GetInt(readChaperKey);
         if(hadChapter>0){
             nextChapter = hadChapter;
         }
-        new ReadingThread().start();
+        LoadChapterObservable loadChapterObservable = new LoadChapterObservable(this);
+        loadChapterObservable.addObserver(this);//add server
+        loadChapterObservable.LoadData();
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
+        Log.e(TAG,"Data has changed to" + ((LoadChapterObservable)observable).getChapter().length());
+        handler.sendEmptyMessage(0);
     }
 
 
-    private class ReadingThread extends Thread {
-        public void run() {
-            AssetManager am = getAssets();
-            InputStream response;
-            try {
-                Log.e(TAG,nextChapter+"第几章");
-                response = am.open(nextChapter+".jpg");
-                if (response != null) {
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    int i = -1;
-                    while ((i = response.read()) != -1) {
-                        baos.write(i);
-                    }
-                    String text = new String(baos.toByteArray(), "GBK");//UTF-8
-                    List<Segment> ret=new ArrayList<Segment>();
-                    int length = 500;
-                    int position = 0;
-                    int readSegment = PreferencesHelper.GetInt(readNumberKey);
-                    while(length<text.length()){
-                        Segment s = new Segment(position,text.substring(0,length));
-                        if(position>=readSegment) {
-                            ret.add(s);
-                        }
-                        text = text.substring(length,text.length());
-                        position++;
-                    }
-                    PreferencesHelper.putIntValue(readNumberKey, 0);
 
-                    Segment s = new Segment(position,text);
-                    ret.add(s);
-                    mListViewAdapter.AddList(ret);
-                    handler.sendEmptyMessage(0);
-                    baos.close();
-                    response.close();
-
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-    }
 
     private Handler handler = new Handler() {
         public void handleMessage(android.os.Message msg) {
