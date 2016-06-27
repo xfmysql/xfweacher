@@ -1,5 +1,6 @@
 package com.its.xfweacher.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -7,15 +8,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.its.xfweacher.R;
-import com.its.xfweacher.dbentity.WeatherItem;
+import com.its.xfweacher.entity.OnedayWeacher;
+import com.its.xfweacher.entity.TodayWeacher;
 import com.its.xfweacher.entity.Weather;
-import com.its.xfweacher.helper.APIHelper;
-import com.its.xfweacher.helper.DbControl;
-import com.its.xfweacher.helper.GetTokenItf;
+import com.its.xfweacher.api.entity.APIHelper;
+import com.its.xfweacher.helper.db.DbControl;
+import com.its.xfweacher.helper.db.GetTokenItf;
 import com.its.xfweacher.utils.DateUtils;
 import com.its.xfweacher.utils.SystemUtils;
 
@@ -24,30 +28,12 @@ import android.support.v4.widget.SwipeRefreshLayout;
 public class WeacherFragment extends Fragment implements APIHelper.WeatherReflush,GetTokenItf {
 
 	private static final String TAG = "WeacherFragment";
-	private TextView txtLoaction,txtTime;
-	private TextView txtWeacherName,txtTemperature;
+	//listview
+	ListView mListView;
+	MyAdapter mListViewAdapter;
+	//oneday
+	private TextView txtLoaction,txtTime,txtWeacherName,txtTemperature,txtContent;
 
-	TextView txtContent;
-	private ImageView ivpic11;
-	private ImageView ivpic12;
-	private TextView tvweek1;
-	private TextView tvwea1;
-	private TextView tvwind1;
-	private TextView tvtemper1;
-
-	private ImageView ivpic21;
-	private ImageView ivpic22;
-	private TextView tvweek2;
-	private TextView tvwea2;
-	private TextView tvwind2;
-	private TextView tvtemper2;
-
-	private ImageView ivpic31;
-	private ImageView ivpic32;
-	private TextView tvweek3;
-	private TextView tvwea3;
-	private TextView tvwind3;
-	private TextView tvtemper3;
 	SwipeRefreshLayout mSwipeRefreshLayout;
 
 	/**
@@ -87,42 +73,14 @@ public class WeacherFragment extends Fragment implements APIHelper.WeatherReflus
 			}
 		});
 
+		mListView = (ListView) view.findViewById(R.id.listView);
+
 		txtLoaction = (TextView) view.findViewById(R.id.txtLoaction);
 		txtTime = (TextView) view.findViewById(R.id.txtTime);
 
 		txtWeacherName = (TextView) view.findViewById(R.id.txtWeacherName);
 		txtTemperature = (TextView) view.findViewById(R.id.txtTemperature);
-
 		txtContent = (TextView) view.findViewById(R.id.txtContent);
-
-
-		// �ڶ�������
-		ivpic21 = (ImageView) view.findViewById(R.id.ivpic21);
-		ivpic22 = (ImageView) view.findViewById(R.id.ivpic22);
-
-		tvweek2 = (TextView) view.findViewById(R.id.tvweek2);
-		tvwea2 = (TextView) view.findViewById(R.id.tvwea2);
-		tvwind2 = (TextView) view.findViewById(R.id.tvwind2);
-		tvtemper2 = (TextView) view.findViewById(R.id.tvtemper2);
-
-		// ���������
-		ivpic31 = (ImageView) view.findViewById(R.id.ivpic31);
-		ivpic32 = (ImageView) view.findViewById(R.id.ivpic32);
-
-		tvweek3 = (TextView) view.findViewById(R.id.tvweek3);
-		tvwea3 = (TextView) view.findViewById(R.id.tvwea3);
-		tvwind3 = (TextView) view.findViewById(R.id.tvwind3);
-		tvtemper3 = (TextView) view.findViewById(R.id.tvtemper3);
-
-		// ��һ������
-		ivpic11 = (ImageView) view.findViewById(R.id.ivpic11);
-		ivpic12 = (ImageView) view.findViewById(R.id.ivpic12);
-
-		tvweek1 = (TextView) view.findViewById(R.id.tvweek1);
-		tvwea1 = (TextView) view.findViewById(R.id.tvwea1);
-		tvwind1 = (TextView) view.findViewById(R.id.tvwind1);
-		tvtemper1 = (TextView) view.findViewById(R.id.tvtemper1);
-
 		mSwipeRefreshLayout.setRefreshing(true);
 		mSwipeRefreshLayout.postDelayed(new Runnable() {
 			@Override
@@ -138,8 +96,18 @@ public class WeacherFragment extends Fragment implements APIHelper.WeatherReflus
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		try {
+
+			TodayWeacher _entity = DbControl.todayWeacherDao.getToday();
+			if(_entity!=null) {
+				String date = DateUtils.Timestamp2String(_entity.AddTime, "yyyy-MM-dd");
+				txtTime.setText(date);
+				txtWeacherName.setText(_entity.WeatherStr);
+				txtTemperature.setText(_entity.Temperature);
+				txtContent.setText("PM2.5:" + _entity.PM25);
+			}
+			mListViewAdapter = new MyAdapter(this.getContext(),null);
+			mListView.setAdapter(mListViewAdapter);
 			//new WeatherAsyncTask(this.getActivity()).execute("绍兴");
 			//WeatherAsyncTask.setWeacherCallback(this);
 		}catch (Exception e){
@@ -156,46 +124,15 @@ public class WeacherFragment extends Fragment implements APIHelper.WeatherReflus
 	}
 	@Override
 	public void onReflush() {
-		List<WeatherItem> pList = DbControl.weatherDao.getListToday();
-		for(WeatherItem w : pList) {
-			Log.e(TAG, w.weatherdate + "," + w.pm25 + "," + w.temperature + "," + w.weatherstr+ "," + w.wind + "\n\r");
+		List<OnedayWeacher> _list = DbControl.oneWeacherDao.get7TodayWeacher();
+		if(_list!=null) {
+			mListViewAdapter.setList(_list);
+			mListViewAdapter.notifyDataSetChanged();
+			//debug
+			for(OnedayWeacher w : _list) {
+				Log.e(TAG, w.WeatherStr + "," + w.PM25 + "," + w.Temperature + "," + w.Wind+ "," + w.WindSpeed + "\n\r");
+			}
 		}
-		if(pList.size()<=0) return;
-		Weather w =  pList.get(0).tWeacher();
-		//txtLoaction.setText("");
-		String date = DateUtils.Timestamp2String(w.getAddtime(),"yyyy-MM-dd");
-		txtTime.setText(date);
-
-		//
-		txtWeacherName.setText(w.getWeatherstr());
-		txtTemperature.setText(w.getTemperature());
-		txtContent.setText("PM2.5:" + w.getPm25());
-
-
-		//ivpic11.setImageBitmap(w.get);
-		//ivpic12.setImageBitmap(wa.getNightPicture());
-		tvweek1.setText(w.getWeatherdate());
-		tvwea1.setText(w.getWeatherstr());
-		tvwind1.setText(w.getWind());
-		tvtemper1.setText(w.getTemperature());
-
-		w = pList.get(1).tWeacher();
-		tvtemper2.setText(w.getTemperature());
-		//ivpic21.setImageBitmap(w.getDayPicture());
-		//ivpic22.setImageBitmap(w.getNightPicture());
-		tvweek2.setText(w.getWeatherdate());
-		tvwea2.setText(w.getWeatherstr());
-		tvwind2.setText(w.getWind());
-		tvtemper2.setText(w.getTemperature());
-
-		w = pList.get(2).tWeacher();
-		tvtemper3.setText(w.getTemperature());
-		//ivpic31.setImageBitmap(wa.getDayPicture());
-		//ivpic32.setImageBitmap(wa.getNightPicture());
-		tvweek3.setText(w.getWeatherdate());
-		tvwea3.setText(w.getWeatherstr());
-		tvwind3.setText(w.getWind());
-		tvtemper3.setText(w.getTemperature());
 
 	}
 
@@ -204,6 +141,69 @@ public class WeacherFragment extends Fragment implements APIHelper.WeatherReflus
 		String token = SystemUtils.getToken();
 		if(!TextUtils.isEmpty(token)) {
 			APIHelper.getWeather(token);
+		}
+	}
+
+
+	private class MyAdapter extends BaseAdapter {
+		private LayoutInflater mInflater;//得到一个LayoutInfalter对象用来导入布局 /*构造函数*/
+		List<OnedayWeacher> listWeacher = null;
+		public MyAdapter(Context context,List<OnedayWeacher> list) {
+			this.mInflater = LayoutInflater.from(context);
+			listWeacher = list;
+		}
+		public void setList(List<OnedayWeacher> list) {
+			listWeacher = list;
+		}
+
+		public final class ViewHolder {
+			public TextView txtWeek;
+		}
+
+		@Override
+		public int getCount() {
+			if(listWeacher!=null)
+				return listWeacher.size();
+			return 0;
+		}
+
+		@Override
+		public Object getItem(int position) {
+			if(listWeacher!=null)
+				return listWeacher.get(position);
+			return null;
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+		@Override
+		public View getView(final int position, View convertView, ViewGroup parent) {
+			ViewHolder holder;
+			//观察convertView随ListView滚动情况
+			Log.v("MyListViewBase", "getView " + position + " " + convertView);
+			OnedayWeacher onedayWeacher = (OnedayWeacher)listWeacher.get(position);
+			if (convertView == null) {
+				convertView = mInflater.inflate(R.layout.uc_li_oneday, null);
+				holder = new ViewHolder();
+				holder.txtWeek = (TextView) convertView.findViewById(R.id.txtWeek);
+				convertView.setTag(holder);//绑定ViewHolder对象           }
+			} else {
+				holder = (ViewHolder) convertView.getTag();//取出ViewHolder对象
+			}
+
+			holder.txtWeek.setText(onedayWeacher.WeatherStr);
+			//ivpic11.setImageBitmap(w.get);
+			//ivpic12.setImageBitmap(wa.getNightPicture());
+//			tvweek1.setText(w.getWeatherdate());
+//			tvwea1.setText(w.getWeatherstr());
+//			tvwind1.setText(w.getWind());
+//			tvtemper1.setText(w.getTemperature());
+
+
+			return convertView;
 		}
 	}
 }

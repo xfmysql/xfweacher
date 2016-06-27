@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.its.xfweacher.R;
-import com.its.xfweacher.helper.LocationHelper;
+import com.its.xfweacher.api.LocationHelper;
 import com.its.xfweacher.utils.LocationUtils;
 
 /**

@@ -1,8 +1,8 @@
-package com.its.xfweacher.helper;
+package com.its.xfweacher.helper.db;
 
 import android.content.Context;
 
-import com.its.xfweacher.dbentity.WeatherItem;
+import com.its.xfweacher.entity.TodayWeacher;
 import com.its.xfweacher.utils.DateUtils;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.DeleteBuilder;
@@ -16,40 +16,40 @@ import java.util.List;
 /**
  * Created by Ender on 2016/1/17.
  */
-public class WeatherDao {
+public class TodayWeacherDao {
     private Context context;
-    private Dao<WeatherItem, Integer> dao;
+    private Dao<TodayWeacher, Integer> dao;
     private DbHelper helper;
-    public WeatherDao(Context context) {
+    public TodayWeacherDao(Context context) {
         this.context = context;
         try {
             helper = DbHelper.getHelper(context);
-            dao = helper.getDao(WeatherItem.class);
+            dao = helper.getDao(TodayWeacher.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
 
-    public boolean create(WeatherItem notice){
+    public boolean create(TodayWeacher entity){
         try {
-            return dao.create(notice) > 0;
+            return dao.create(entity) > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
-    public boolean createOrUpdate(WeatherItem albumInfo){
+    public boolean createOrUpdate(TodayWeacher entity){
         try {
-            return dao.createOrUpdate(albumInfo).getNumLinesChanged() > 0;
+            return dao.createOrUpdate(entity).getNumLinesChanged() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
-    public boolean addAll(List<WeatherItem> list){
+    public boolean addAll(List<TodayWeacher> list){
         if(list == null || list.size() <= 0) return false;
-        for (WeatherItem albumInfo : list){
+        for (TodayWeacher albumInfo : list){
             try {
                 dao.createOrUpdate(albumInfo);
             } catch (SQLException e) {
@@ -67,19 +67,20 @@ public class WeatherDao {
             return false;
         }
     }
-    public boolean delete(WeatherItem info){
+    public boolean delete(TodayWeacher entity){
         try {
 
-            return dao.delete(info)>0;
+            return dao.delete(entity)>0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
-    public List<WeatherItem> getListToday(){
+    public List<TodayWeacher> get7TodayWeacher(){
         try {
             QueryBuilder builder = dao.queryBuilder();
             builder.where().ge("addtime", Integer.parseInt(DateUtils.Timestamp2String(new Date().getTime()/1000, "yyyyMMdd")));
+            builder.limit(7);
             return dao.query(builder.prepare());
         } catch (SQLException e) {
             e.printStackTrace();
@@ -87,7 +88,7 @@ public class WeatherDao {
         }
     }
 
-    public WeatherItem getToday() {
+    public TodayWeacher getToday() {
         try {
             QueryBuilder builder = dao.queryBuilder();
             builder.where().eq("WeatherDate", Integer.parseInt(DateUtils.Timestamp2String(new Date().getTime()/1000, "yyyyMMdd")));

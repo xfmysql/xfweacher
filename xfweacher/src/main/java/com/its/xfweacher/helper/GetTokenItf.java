@@ -1,4 +1,4 @@
-package com.its.xfweacher.helper;
+package com.its.xfweacher.helper.db;
 
 /**
  * Created by xf on 2016/3/17.

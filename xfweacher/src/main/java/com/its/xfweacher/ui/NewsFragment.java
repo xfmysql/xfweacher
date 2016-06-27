@@ -17,7 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.its.xfweacher.R;
-import com.its.xfweacher.helper.APIHelper;
+import com.its.xfweacher.api.entity.APIHelper;
 import com.its.xfweacher.json.entity.RssFeed;
 import com.its.xfweacher.json.entity.RssItem;
 import com.its.xfweacher.utils.Constants;

@@ -1,15 +1,16 @@
-package com.its.xfweacher.helper;
+package com.its.xfweacher.api.entity;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.its.xfweacher.AppContext;
-import com.its.xfweacher.dbentity.WeatherItem;
-import com.its.xfweacher.entity.Weather;
+import com.its.xfweacher.helper.db.GetTokenItf;
+import com.its.xfweacher.api.RssHandler;
+import com.its.xfweacher.helper.db.DbControl;
+import com.its.xfweacher.entity.TodayWeacher;
 import com.its.xfweacher.json.entity.RssFeed;
 import com.its.xfweacher.utils.Constants;
 import com.its.xfweacher.utils.SystemUtils;
@@ -115,11 +116,11 @@ public class APIHelper {
                             Log.e(TAG,result.toString());
                             String s = gson.toJson(result.getAsJsonArray("data"));
 
-                            List<WeatherItem> wlist = gson.fromJson(s, new TypeToken<List<WeatherItem>>() {
+                            List<TodayWeacher> wlist = gson.fromJson(s, new TypeToken<List<TodayWeacher>>() {
                             }.getType());
 
                             //写入
-                            DbControl.weatherDao.addAll(wlist);
+                            //DbControl.weatherDao.addAll(wlist);
 
                             if(weatherReflush!=null)//回调
                                 weatherReflush.onReflush();

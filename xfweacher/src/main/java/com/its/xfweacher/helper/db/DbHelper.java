@@ -1,9 +1,10 @@
-package com.its.xfweacher.helper;
+package com.its.xfweacher.helper.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.its.xfweacher.dbentity.WeatherItem;
+import com.its.xfweacher.entity.OnedayWeacher;
+import com.its.xfweacher.entity.TodayWeacher;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
@@ -30,7 +31,8 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
         try
         {
-            TableUtils.createTable(connectionSource, WeatherItem.class);
+            TableUtils.createTable(connectionSource, TodayWeacher.class);
+            TableUtils.createTable(connectionSource, OnedayWeacher.class);
         } catch (SQLException e)
         {
             e.printStackTrace();
@@ -51,7 +53,9 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
      */
     public void init() {
         try {
-            TableUtils.dropTable(connectionSource, WeatherItem.class, true);
+            TableUtils.dropTable(connectionSource, TodayWeacher.class, true);
+            TableUtils.dropTable(connectionSource, OnedayWeacher.class, true);
+
             onCreate(this.getWritableDatabase(), connectionSource);
         } catch (SQLException e) {
             e.printStackTrace();

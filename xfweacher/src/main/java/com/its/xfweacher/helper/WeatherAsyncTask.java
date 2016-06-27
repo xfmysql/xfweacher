@@ -1,4 +1,4 @@
-package com.its.xfweacher.helper;
+package com.its.xfweacher.helper.db;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;

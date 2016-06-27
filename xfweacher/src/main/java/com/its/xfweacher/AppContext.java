@@ -8,12 +8,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
-import com.its.xfweacher.helper.APIHelper;
-import com.its.xfweacher.helper.DbControl;
-import com.its.xfweacher.helper.DbHelper;
-import com.its.xfweacher.helper.GetTokenItf;
+import com.its.xfweacher.api.entity.APIHelper;
+import com.its.xfweacher.entity.OnedayWeacher;
+import com.its.xfweacher.entity.TodayWeacher;
+import com.its.xfweacher.helper.db.DbControl;
+import com.its.xfweacher.helper.db.DbHelper;
+import com.its.xfweacher.helper.db.GetTokenItf;
 import com.its.xfweacher.ui.MainActivity;
 import com.its.xfweacher.utils.Constants;
+import com.its.xfweacher.utils.DateUtils;
 import com.its.xfweacher.utils.SystemUtils;
 
 /**
@@ -55,6 +58,19 @@ public class AppContext extends Application implements GetTokenItf {
             DbHelper.getHelper(this).init();
         DbControl.Initial(this);
 
+        TodayWeacher todayEntity = new TodayWeacher();
+        todayEntity.WeatherStr = "今天";
+        todayEntity.WeatherDate = System.currentTimeMillis()/1000;
+        todayEntity.AddTime = System.currentTimeMillis()/1000;
+        DbControl.todayWeacherDao.createOrUpdate(todayEntity);
+
+        for(int i=0;i<7;i++){
+            OnedayWeacher entity = new OnedayWeacher();
+            entity.WeatherStr = "天"+i;
+            entity.WeatherDate = System.currentTimeMillis()/1000;
+            entity.AddTime = System.currentTimeMillis()/1000;
+            DbControl.oneWeacherDao.createOrUpdate(entity);
+        }
     }
 
 
