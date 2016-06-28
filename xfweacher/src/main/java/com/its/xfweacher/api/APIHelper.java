@@ -1,4 +1,4 @@
-package com.its.xfweacher.api.entity;
+package com.its.xfweacher.api;
 
 import android.content.Context;
 import android.util.Log;
@@ -7,11 +7,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.its.xfweacher.AppContext;
+import com.its.xfweacher.api.entity.RssFeed;
 import com.its.xfweacher.helper.db.GetTokenItf;
 import com.its.xfweacher.api.RssHandler;
 import com.its.xfweacher.helper.db.DbControl;
 import com.its.xfweacher.entity.TodayWeacher;
-import com.its.xfweacher.json.entity.RssFeed;
+
 import com.its.xfweacher.utils.Constants;
 import com.its.xfweacher.utils.SystemUtils;
 import com.koushikdutta.async.future.FutureCallback;

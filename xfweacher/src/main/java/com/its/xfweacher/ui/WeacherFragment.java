@@ -14,12 +14,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.its.xfweacher.R;
+import com.its.xfweacher.api.APIHelper;
 import com.its.xfweacher.entity.OnedayWeacher;
 import com.its.xfweacher.entity.TodayWeacher;
 import com.its.xfweacher.entity.Weather;
-import com.its.xfweacher.api.entity.APIHelper;
 import com.its.xfweacher.helper.db.DbControl;
 import com.its.xfweacher.helper.db.GetTokenItf;
+import com.its.xfweacher.ui.uc.HorizontalListView;
 import com.its.xfweacher.utils.DateUtils;
 import com.its.xfweacher.utils.SystemUtils;
 
@@ -29,7 +30,7 @@ public class WeacherFragment extends Fragment implements APIHelper.WeatherReflus
 
 	private static final String TAG = "WeacherFragment";
 	//listview
-	ListView mListView;
+	HorizontalListView  mListView;
 	MyAdapter mListViewAdapter;
 	//oneday
 	private TextView txtLoaction,txtTime,txtWeacherName,txtTemperature,txtContent;
@@ -73,14 +74,24 @@ public class WeacherFragment extends Fragment implements APIHelper.WeatherReflus
 			}
 		});
 
-		mListView = (ListView) view.findViewById(R.id.listView);
+		mListView = (HorizontalListView) view.findViewById(R.id.listView);
+		mListViewAdapter = new MyAdapter(this.getContext(),null);
+		mListView.setAdapter(mListViewAdapter);
 
 		txtLoaction = (TextView) view.findViewById(R.id.txtLoaction);
 		txtTime = (TextView) view.findViewById(R.id.txtTime);
-
 		txtWeacherName = (TextView) view.findViewById(R.id.txtWeacherName);
 		txtTemperature = (TextView) view.findViewById(R.id.txtTemperature);
 		txtContent = (TextView) view.findViewById(R.id.txtContent);
+		TodayWeacher _entity = DbControl.todayWeacherDao.getToday();
+		if(_entity!=null) {
+			String date = DateUtils.Timestamp2String(_entity.AddTime, "yyyy-MM-dd");
+			txtTime.setText(date);
+			txtWeacherName.setText(_entity.WeatherStr);
+			txtTemperature.setText(_entity.Temperature);
+			txtContent.setText("PM2.5:" + _entity.PM25);
+		}
+
 		mSwipeRefreshLayout.setRefreshing(true);
 		mSwipeRefreshLayout.postDelayed(new Runnable() {
 			@Override
@@ -98,16 +109,7 @@ public class WeacherFragment extends Fragment implements APIHelper.WeatherReflus
 		super.onCreate(savedInstanceState);
 		try {
 
-			TodayWeacher _entity = DbControl.todayWeacherDao.getToday();
-			if(_entity!=null) {
-				String date = DateUtils.Timestamp2String(_entity.AddTime, "yyyy-MM-dd");
-				txtTime.setText(date);
-				txtWeacherName.setText(_entity.WeatherStr);
-				txtTemperature.setText(_entity.Temperature);
-				txtContent.setText("PM2.5:" + _entity.PM25);
-			}
-			mListViewAdapter = new MyAdapter(this.getContext(),null);
-			mListView.setAdapter(mListViewAdapter);
+
 			//new WeatherAsyncTask(this.getActivity()).execute("绍兴");
 			//WeatherAsyncTask.setWeacherCallback(this);
 		}catch (Exception e){

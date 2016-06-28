@@ -6,8 +6,8 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.SAXException;
 import android.util.Log;
 
-import com.its.xfweacher.json.entity.RssFeed;
-import com.its.xfweacher.json.entity.RssItem;
+import com.its.xfweacher.api.entity.RssFeed;
+import com.its.xfweacher.api.entity.RssItem;
 
 import org.xml.sax.Attributes;
 

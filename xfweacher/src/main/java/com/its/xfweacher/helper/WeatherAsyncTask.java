@@ -1,13 +1,13 @@
-package com.its.xfweacher.helper.db;
+package com.its.xfweacher.helper;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 
-import com.its.xfweacher.json.entity.Result;
-import com.its.xfweacher.json.entity.Weather;
-import com.its.xfweacher.json.entity.Weather_data;
+import com.its.xfweacher.api.entity.Result;
+import com.its.xfweacher.api.entity.Weather;
+import com.its.xfweacher.api.entity.Weather_data;
 import com.its.xfweacher.utils.HttpUtils;
 
 

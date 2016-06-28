@@ -1,4 +1,4 @@
-package com.its.xfweacher.json.entity;
+package com.its.xfweacher.api.entity;
 
 
 import android.text.TextUtils;

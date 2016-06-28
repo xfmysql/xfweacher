@@ -31,10 +31,7 @@ import com.its.xfweacher.R;
 import com.its.xfweacher.entity.City;
 import com.its.xfweacher.entity.District;
 import com.its.xfweacher.entity.Province;
-import com.its.xfweacher.json.entity.Index;
-import com.its.xfweacher.json.entity.Result;
-import com.its.xfweacher.json.entity.Weather;
-import com.its.xfweacher.json.entity.Weather_data;
+import com.its.xfweacher.api.entity.*;
 
 
 public class HttpUtils {
