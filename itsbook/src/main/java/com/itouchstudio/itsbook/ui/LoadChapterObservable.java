@@ -15,11 +15,11 @@ import java.util.Observable;
  * Created by its on 2016-06-21.
  */
 public class LoadChapterObservable extends Observable {
-    private int data = 0;
+
     private Context mContext;
     String chapterPre = "",chapter="",chapterNext="";
     public String getChapter(){
-        return chapterPre+"\n"+chapter+"\n"+chapterNext;
+        return chapter;//chapterPre+"\n"+chapter+"\n"+chapterNext;
     }
 
     public void LoadData(){
@@ -36,10 +36,10 @@ public class LoadChapterObservable extends Observable {
             hadChapter = chapter>1?chapter:1;
         }
         public void run() {
-            if(hadChapter>1)
-                chapterPre = read(hadChapter-1);
+            //if(hadChapter>1)
+             //   chapterPre = read(hadChapter-1);
             chapter = read(hadChapter);
-            chapterNext = read(hadChapter+1);
+            //chapterNext = read(hadChapter+1);
 
             setChanged();
             //只有在setChange()被调用后，notifyObservers()才会去调用update()，否则什么都不干。

@@ -7,5 +7,6 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-
+    <string name="install">安装</string>
+    <string name="chaplist">列表</string>
 </resources>
