@@ -62,14 +62,17 @@ public class ChapterActivity extends Activity implements Observer {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
 
+                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && lastItemIndex == 0) {
+                    Log.e(TAG, "第一个item");
+                    
+                }
                 if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && lastItemIndex == mListViewAdapter.getCount() - 1) {
-                    Log.e(TAG, "onScrollStateChanged");
-                    if(nextChapter<maxChapter-1) {
+                    Log.e(TAG, "最后一个item");
+                    if(nextChapter<maxChapter) {
                         nextChapter += 1;
                         PreferencesHelper.putIntValue(readChaperKey, nextChapter);
                         loadChapterObservable.LoadData();
                     }
-
                 }
                 // 不滚动时保存当前滚动到的位置
                 if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
