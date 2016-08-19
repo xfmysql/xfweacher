@@ -3,7 +3,7 @@
         android:id="@+id/swipe_container"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:background="@drawable/bg1">
+        android:background="@drawable/bg">
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -18,37 +18,37 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:id="@+id/layoutTime"
                 android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true">
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/layoutTimeC"
-                    android:layout_centerVertical="true">
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="20dp"
+                        android:layout_height="wrap_content"
                         android:text="绍兴"
                         android:id="@+id/txtLoaction"
                         android:layout_centerHorizontal="true"
                         style="@style/whiteText"
-                        android:textSize="@dimen/size18" />
+                        android:textSize="@dimen/size30" />
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="20dp"
+                        android:layout_height="wrap_content"
                         android:text="2016-02-01 周一 腊月 初六"
                         android:id="@+id/txtTime"
                         android:layout_centerHorizontal="true"
-                        android:layout_below="@+id/txtLoaction"
                         style="@style/whiteText"
-                        android:textSize="@dimen/size14"
-                        android:layout_marginTop="5dp" />
-                </RelativeLayout>
+                        android:textSize="@dimen/size30" />
+                </LinearLayout>
 
             </RelativeLayout>
 
@@ -68,36 +68,33 @@
 
                 <LinearLayout
                     android:orientation="vertical"
-                    android:layout_width="wrap_content"
+                    android:layout_width="250px"
                     android:layout_height="wrap_content"
                     android:id="@+id/layoutTemperature"
                     android:layout_marginLeft="10dp">
 
-                    <RelativeLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:id="@+id/layoutWeacher"
-                        android:gravity="center_horizontal">
+                        android:gravity="center_vertical">
 
                         <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:id="@+id/imgWeacher"
-                            android:src="@drawable/d06"
-                            android:layout_centerVertical="true" />
+                            android:background="@drawable/d01" />
 
                         <TextView
                             android:id="@+id/txtWeacherName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
-                            android:layout_weight="1"
-                            android:layout_toRightOf="@+id/imgWeacher"
-                            android:text="晴"
+                            android:text="@string/value_weacher"
                             style="@style/whiteText"
                             android:layout_centerVertical="true"
-                            android:textSize="@dimen/size16" />
-                    </RelativeLayout>
+                            android:textSize="@dimen/size40" />
+                    </LinearLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -111,19 +108,38 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="0"
+                            android:text="@string/value_templ"
                             android:layout_centerVertical="true"
-                            android:textSize="@dimen/size40" />
+                            android:textSize="@dimen/size120" />
 
                         <TextView
                             style="@style/whiteText"
-                            android:id="@+id/txtUnit"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:id="@+id/lbTemperature"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="C"
-                            android:textSize="@dimen/size16"
+                            android:text="@string/lb_templ"
+                            android:textSize="@dimen/size40"
                             android:layout_toRightOf="@+id/txtTemperature" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="60px"
+                        android:id="@+id/layoutDetail"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@+id/layoutToday">
+
+                        <TextView
+                            style="@style/whiteText"
+                            android:id="@+id/txtContent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="PM 80 湿 80"
+                            android:layout_centerVertical="true"
+                            android:textSize="@dimen/size40" />
                     </RelativeLayout>
 
                 </LinearLayout>
@@ -159,32 +175,11 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:id="@+id/layoutDetail"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@+id/layoutToday">
-
-                <TextView
-                    style="@style/whiteText"
-                    android:id="@+id/txtContent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="晴"
-                    android:layout_centerVertical="true"
-                    android:textSize="@dimen/size16" />
-            </RelativeLayout>
-
             <TextView
                 android:layout_width="700px"
                 android:layout_height="1px"
                 android:id="@+id/txtLine"
-                android:layout_below="@+id/layoutDetail"
+                android:layout_below="@+id/layoutToday"
                 android:background="@color/white"
                 android:layout_centerHorizontal="true" />
 
@@ -194,7 +189,7 @@
                 android:id="@+id/layoutBottom"
                 android:layout_alignParentBottom="false"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@+id/layoutDetail">
+                android:layout_below="@+id/layoutToday">
 
                 <com.its.xfweacher.ui.uc.HorizontalListView
                     android:layout_width="fill_parent"

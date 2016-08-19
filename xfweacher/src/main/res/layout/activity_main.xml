@@ -49,7 +49,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:text="@string/weacherTxt"
-                    style="@style/mainTabBottom" />
+                    style="@style/mainTabBottom"
+                    android:textSize="@dimen/size20" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -79,7 +80,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:text="@string/lookTxt"
-                    style="@style/mainTabBottom" />
+                    style="@style/mainTabBottom"
+                    android:textSize="@dimen/size20" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -110,7 +112,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:text="@string/fountTxt"
-                    style="@style/mainTabBottom"/>
+                    style="@style/mainTabBottom"
+                    android:textSize="@dimen/size20" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -140,7 +143,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:text="@string/mineTxt"
-                    style="@style/mainTabBottom" />
+                    style="@style/mainTabBottom"
+                    android:textSize="@dimen/size20" />
             </LinearLayout>
         </RelativeLayout>
 

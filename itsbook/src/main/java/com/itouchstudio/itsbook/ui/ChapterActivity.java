@@ -64,7 +64,7 @@ public class ChapterActivity extends Activity implements Observer {
 
                 if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && lastItemIndex == 0) {
                     Log.e(TAG, "第一个item");
-                    
+
                 }
                 if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && lastItemIndex == mListViewAdapter.getCount() - 1) {
                     Log.e(TAG, "最后一个item");
