@@ -38,15 +38,26 @@ public class DateUtils {
         return tsStr;
     }
 
-    public static Date Timestamp2Date(long time){
-        Timestamp ts = new Timestamp(time);
-        Date date = new Date();
+    /**
+     * 日期转换成字符串
+     * @param date
+     * @param format
+     * @return
+     */
+    public static String Timestamp2String(Date date,String format){
+
+        String tsStr = "";
+        DateFormat sdf = new SimpleDateFormat(format);
         try {
-            date = ts;
-            System.out.println(date);
+            //方法一
+            tsStr = sdf.format(date);
+            System.out.println(tsStr);
+            //方法二
+            //tsStr = ts.toString();
+            //System.out.println(tsStr);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return date;
+        return tsStr;
     }
 }

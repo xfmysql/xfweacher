@@ -58,6 +58,7 @@ public class AppContext extends Application implements GetTokenItf {
             DbHelper.getHelper(this).init();
         DbControl.Initial(this);
 
+        /* //默认测试数据
         TodayWeacher todayEntity = new TodayWeacher();
         todayEntity.WeatherStr = "今天";
         todayEntity.WeatherDate = System.currentTimeMillis()/1000;
@@ -66,11 +67,12 @@ public class AppContext extends Application implements GetTokenItf {
 
         for(int i=0;i<7;i++){
             OnedayWeacher entity = new OnedayWeacher();
-            entity.WeatherStr = "天"+i;
-            entity.WeatherDate = System.currentTimeMillis()/1000;
-            entity.AddTime = System.currentTimeMillis()/1000;
+            entity.weathertxt = "天"+i;
+            entity.weatherdate = "这一天";
+            entity.addtime = System.currentTimeMillis()/1000;
             DbControl.oneWeacherDao.createOrUpdate(entity);
         }
+        */
     }
 
 

@@ -9,28 +9,31 @@ import com.j256.ormlite.field.DatabaseField;
 public class OnedayWeacher {
 
         @DatabaseField(generatedId = true)
-        public int ID;
+        public int id;
         @DatabaseField
-        public long CityCode;
-        @DatabaseField
-        public long AddTime;
-        @DatabaseField
-        public long WeatherDate;
-
+        public String citycode;
     @DatabaseField
-    public String Temperature;
-    @DatabaseField
-    public String TemperatuRef;
+    public String weatherdate;
 
         @DatabaseField
-        public String WeatherStr;
+        public long addtime;
+    @DatabaseField
+    public String weathertxt;
+    @DatabaseField
+    public String pm25;
+    @DatabaseField
+    public String winddir;
+    @DatabaseField
+    public String windspd;
+    @DatabaseField
+    public String tmpheight;
+    @DatabaseField
+    public String tmplow;
+    @DatabaseField
+    public String ttimg;
         @DatabaseField
-        public String PM25;
-        @DatabaseField
-        public String Wind;
-        @DatabaseField
-        public String WindSpeed;
-        @DatabaseField
-        public String WeacherImg;
+        public long updatetime;
+
+
 
     }

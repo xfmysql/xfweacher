@@ -24,6 +24,7 @@ import com.its.xfweacher.ui.uc.HorizontalListView;
 import com.its.xfweacher.utils.DateUtils;
 import com.its.xfweacher.utils.SystemUtils;
 
+import java.util.Date;
 import java.util.List;
 import android.support.v4.widget.SwipeRefreshLayout;
 public class WeacherFragment extends Fragment implements APIHelper.WeatherReflush,GetTokenItf {
@@ -74,8 +75,8 @@ public class WeacherFragment extends Fragment implements APIHelper.WeatherReflus
 			}
 		});
 
-		mListView = (HorizontalListView) view.findViewById(R.id.listView);
-		mListViewAdapter = new MyAdapter(this.getContext(),null);
+		mListView = (HorizontalListView) view.findViewById(R.id.horizontalListView);
+		mListViewAdapter = new MyAdapter(this.getContext(),DbControl.oneWeacherDao.get7TodayWeacher());
 		mListView.setAdapter(mListViewAdapter);
 
 		txtLoaction = (TextView) view.findViewById(R.id.txtLoaction);
@@ -83,15 +84,22 @@ public class WeacherFragment extends Fragment implements APIHelper.WeatherReflus
 		txtWeacherName = (TextView) view.findViewById(R.id.txtWeacherName);
 		txtTemperature = (TextView) view.findViewById(R.id.txtTemperature);
 		txtContent = (TextView) view.findViewById(R.id.txtContent);
-		TodayWeacher _entity = DbControl.todayWeacherDao.getToday();
-		if(_entity!=null) {
-			String date = DateUtils.Timestamp2String(_entity.AddTime, "yyyy-MM-dd");
-			txtTime.setText(date);
-			txtWeacherName.setText(_entity.WeatherStr);
-			txtTemperature.setText(_entity.Temperature);
-			txtContent.setText("PM2.5:" + _entity.PM25);
-		}
 
+		String date = DateUtils.Timestamp2String(new Date(), "yyyy-MM-dd");
+		txtTime.setText(date);
+
+		OnedayWeacher _entity = DbControl.oneWeacherDao.getToday();
+		if(_entity!=null) {
+			txtWeacherName.setText(_entity.weathertxt);
+			txtTemperature.setText(_entity.tmpheight);
+			txtContent.setText(_entity.winddir+" "+_entity.windspd);
+		}
+		else
+		{
+			txtWeacherName.setText("未知");
+			txtTemperature.setText("0");
+			txtContent.setText(" " );
+		}
 		mSwipeRefreshLayout.setRefreshing(true);
 		mSwipeRefreshLayout.postDelayed(new Runnable() {
 			@Override
@@ -132,7 +140,7 @@ public class WeacherFragment extends Fragment implements APIHelper.WeatherReflus
 			mListViewAdapter.notifyDataSetChanged();
 			//debug
 			for(OnedayWeacher w : _list) {
-				Log.e(TAG, w.WeatherStr + "," + w.PM25 + "," + w.Temperature + "," + w.Wind+ "," + w.WindSpeed + "\n\r");
+				Log.e(TAG, "init db:"+w.weatherdate + "," + w.weathertxt + "," + w.winddir + "," + w.windspd+ "," + w.addtime + "\n\r");
 			}
 		}
 
@@ -153,13 +161,19 @@ public class WeacherFragment extends Fragment implements APIHelper.WeatherReflus
 		public MyAdapter(Context context,List<OnedayWeacher> list) {
 			this.mInflater = LayoutInflater.from(context);
 			listWeacher = list;
+
+			Log.e(TAG,"list size:"+list.size());
 		}
 		public void setList(List<OnedayWeacher> list) {
 			listWeacher = list;
 		}
 
 		public final class ViewHolder {
-			public TextView txtWeek;
+			public TextView txtDate;
+			public TextView txtWeather;
+			public ImageView imgWeather;
+			public TextView txtTemperature;
+			public TextView txtWind;
 		}
 
 		@Override
@@ -190,21 +204,21 @@ public class WeacherFragment extends Fragment implements APIHelper.WeatherReflus
 			if (convertView == null) {
 				convertView = mInflater.inflate(R.layout.uc_li_oneday, null);
 				holder = new ViewHolder();
-				holder.txtWeek = (TextView) convertView.findViewById(R.id.txtWeek);
+				holder.txtDate = (TextView) convertView.findViewById(R.id.txtDate);
+				holder.txtWeather = (TextView) convertView.findViewById(R.id.txtWeather);
+				holder.imgWeather = (ImageView) convertView.findViewById(R.id.imgWeather);
+				holder.txtTemperature = (TextView) convertView.findViewById(R.id.txtTemperature);
+				holder.txtWind = (TextView) convertView.findViewById(R.id.txtWind);
 				convertView.setTag(holder);//绑定ViewHolder对象           }
 			} else {
 				holder = (ViewHolder) convertView.getTag();//取出ViewHolder对象
 			}
-
-			holder.txtWeek.setText(onedayWeacher.WeatherStr);
-			//ivpic11.setImageBitmap(w.get);
-			//ivpic12.setImageBitmap(wa.getNightPicture());
-//			tvweek1.setText(w.getWeatherdate());
-//			tvwea1.setText(w.getWeatherstr());
-//			tvwind1.setText(w.getWind());
-//			tvtemper1.setText(w.getTemperature());
-
-
+			//日期，天气，高低温，风力
+			holder.txtDate.setText(onedayWeacher.weatherdate.substring(5));
+			holder.txtWeather.setText(onedayWeacher.weathertxt);
+			//holder.imgWeather.setImageDrawable();
+			holder.txtTemperature.setText(onedayWeacher.tmpheight+"/"+onedayWeacher.tmplow);
+			holder.txtWind.setText(onedayWeacher.winddir+" "+onedayWeacher.windspd);
 			return convertView;
 		}
 	}

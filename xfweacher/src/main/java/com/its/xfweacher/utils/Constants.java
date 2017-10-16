@@ -9,7 +9,7 @@ import java.io.File;
  */
 public class Constants {
     //http://192.168.1.143/api/ http://oauth.itouchstudio.com/
-    public static final String Url_Oauth_Host = "http://oauth.itouchstudio.com/";
+    public static final String Url_Oauth_Host = "http://oauth.findide.com/";
     public static final String Url_Oauth_Authorize = Url_Oauth_Host + "authorize.php";
     public static final String Url_Oauth_Token = Url_Oauth_Host + "token.php";
     public static final String Url_Oauth_Api = Url_Oauth_Host + "resource.php";

@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.its.xfweacher.AppContext;
 import com.its.xfweacher.api.entity.RssFeed;
+import com.its.xfweacher.entity.OnedayWeacher;
 import com.its.xfweacher.helper.db.GetTokenItf;
 import com.its.xfweacher.api.RssHandler;
 import com.its.xfweacher.helper.db.DbControl;
@@ -102,6 +103,7 @@ public class APIHelper {
         weatherReflush = pWeatherReflush;
     }
     public static void getWeather(String token){
+        Log.e(TAG,"getWeather use token:"+token);
         Ion.with(AppContext.getInstance())
                 .load(Constants.Url_Oauth_Api)
                         //.setHeader("Authorization","Bearer "+token)
@@ -114,19 +116,18 @@ public class APIHelper {
                     public void onCompleted(Exception e, JsonObject result) {
                         try {
                             Gson gson = new Gson();
-                            Log.e(TAG,result.toString());
-                            String s = gson.toJson(result.getAsJsonArray("data"));
-
-                            List<TodayWeacher> wlist = gson.fromJson(s, new TypeToken<List<TodayWeacher>>() {
-                            }.getType());
-
-                            //写入
-                            //DbControl.weatherDao.addAll(wlist);
-
-                            if(weatherReflush!=null)//回调
-                                weatherReflush.onReflush();
-//                            for(Weather w :wlist)
-//                                Log.e(TAG,w.getWeatherdate()+","+w.getPm25()+","+w.getTemperature()+","+w.getWeatherstr()+","+w.getWind()+"\n\r");
+                            if(result!=null) {
+                                Log.e(TAG, result.toString());
+                                String s = gson.toJson(result.getAsJsonArray("data"));
+                                List<OnedayWeacher> wlist = gson.fromJson(s, new TypeToken<List<OnedayWeacher>>() {
+                                }.getType());
+                                //写入
+                                DbControl.oneWeacherDao.addAll(wlist);
+                                if(weatherReflush!=null)//回调
+                                    weatherReflush.onReflush();
+                            }else {
+                                Log.e(TAG, "api error");
+                            }
 
                         } catch (Exception er) {
                             er.printStackTrace();
