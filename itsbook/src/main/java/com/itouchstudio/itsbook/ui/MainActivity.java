@@ -19,7 +19,7 @@ import com.itouchstudio.itsbook.entity.NextPage;
 import com.itouchstudio.itsbook.util.PreferencesHelper;
 import com.itouchstudio.itsbook.view.FlipperLayout;
 
-public class MainActivity extends Activity implements OnClickListener, FlipperLayout.TouchListener {
+public class MainActivity extends Activity implements  FlipperLayout.TouchListener {
 	private static final String TAG = "MainActivity";
 	private String text = "";
 	private int textLenght = 0;
@@ -36,64 +36,6 @@ public class MainActivity extends Activity implements OnClickListener, FlipperLa
 	private static final String readChaperKey = "readchapter";
 
 	NextPage nextpage = null;
-	private Handler handler = new Handler() {
-		public void handleMessage(android.os.Message msg) {
-			//打开的时候默认读取
-			FlipperLayout rootLayout = (FlipperLayout) findViewById(R.id.container);
-			View recoverView = LayoutInflater.from(MainActivity.this).inflate(R.layout.view_new, null);
-			View view1 = LayoutInflater.from(MainActivity.this).inflate(R.layout.view_new, null);
-			View view2 = LayoutInflater.from(MainActivity.this).inflate(R.layout.view_new, null);
-			rootLayout.initFlipperViews(MainActivity.this, view2, view1, recoverView);
-
-			textLenght = text.length();
-			System.out.println("----textLenght----->" + textLenght);
-			int hadReadStart = PreferencesHelper.GetInt(readNumberKey);
-			Log.e(TAG, hadReadStart + "--已经读了--" + textLenght);
-
-			if(hadReadStart>0){//上次有阅读
-				if (textLenght > hadReadStart) {
-					showPage(view1, hadReadStart);
-
-					if (textLenght > ( hadReadStart + NextPage.COUNT << 1)) {//有第2页
-						showPage(view2,hadReadStart + NextPage.COUNT);
-						nextpage.startIndex = hadReadStart + NextPage.COUNT;
-						nextpage.endIndex = hadReadStart + NextPage.COUNT*2 ;
-					} else { //没有下一页，下一章
-						nextpage.nextChapter++;
-						new ReadingThread().start();
-						showPage(view2,0);
-						nextpage.startIndex = 0;
-						nextpage.endIndex  = NextPage.COUNT;
-					}
-				} else {
-					Log.e(TAG,"这里怎么进来的");
-					nextpage.nextChapter++;
-					new ReadingThread().start();
-					nextEndIndex = NextPage.COUNT;
-					showPage(view1,nextEndIndex);
-				}
-
-			}else {//第一次读
-				if (textLenght > NextPage.COUNT) { //有第二页
-					showPage(view1,0);
-					if (textLenght > (NextPage.COUNT << 1)) {//有第2页 <<1等于 *2
-						showPage(view2, NextPage.COUNT);
-						nextpage.startIndex = NextPage.COUNT;
-						nextpage.endIndex = NextPage.COUNT << 1;
-					} else { //没有第3页,取到结尾
-						showPage(view2, NextPage.COUNT);
-						nextpage.startIndex = NextPage.COUNT;
-						nextpage.endIndex = textLenght;
-						//new ReadingThread().start();
-					}
-				} else { //小于一页
-					showPage(view1, 0);
-				}
-			}
-
-		};
-	};
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -103,15 +45,10 @@ public class MainActivity extends Activity implements OnClickListener, FlipperLa
 		int _chapter = PreferencesHelper.GetInt(readChaperKey);
 		if(_chapter>0)
 			nextpage.nextChapter = _chapter;
+
 		new ReadingThread().start();
-		handler.sendEmptyMessage(0);
-	}
-
-	@Override
-	public void onClick(View v) {
 
 	}
-
 
 	/**
 	 * 新建第三页
@@ -166,7 +103,7 @@ public class MainActivity extends Activity implements OnClickListener, FlipperLa
 			page = text.subSequence(start,textLenght).toString();
 		textView.setText(page);
 
-		TextView txtNumber = (TextView) view.findViewById(R.id.txtNumber);
+		TextView txtNumber = (TextView)findViewById(R.id.txtNumber);
 		txtNumber.setText((start / NextPage.COUNT + 1) + "/" + textLenght / NextPage.COUNT);
 
 	}
@@ -213,6 +150,7 @@ public class MainActivity extends Activity implements OnClickListener, FlipperLa
 			AssetManager am = getAssets();
 			InputStream response;
 			try {
+				if(nextpage.nextChapter==0)nextpage.nextChapter++;
 				Log.e(TAG,nextpage.nextChapter+"第几章");
 				response = am.open(nextpage.nextChapter+".txt");
 				if (response != null) {
@@ -224,7 +162,7 @@ public class MainActivity extends Activity implements OnClickListener, FlipperLa
 					text = new String(baos.toByteArray(), "UTF-8");//UTF-8
 					baos.close();
 					response.close();
-
+					handler.sendEmptyMessage(0);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -232,5 +170,63 @@ public class MainActivity extends Activity implements OnClickListener, FlipperLa
 
 		}
 	}
+
+
+	private Handler handler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			//打开的时候默认读取
+			FlipperLayout rootLayout = (FlipperLayout) findViewById(R.id.container);
+			View recoverView = LayoutInflater.from(MainActivity.this).inflate(R.layout.view_new, null);
+			View view1 = LayoutInflater.from(MainActivity.this).inflate(R.layout.view_new, null);
+			View view2 = LayoutInflater.from(MainActivity.this).inflate(R.layout.view_new, null);
+			rootLayout.initFlipperViews(MainActivity.this, view2, view1, recoverView);
+
+			textLenght = text.length();
+			int hadReadStart = PreferencesHelper.GetInt(readNumberKey);
+			Log.e(TAG,  "--已经读了--" + hadReadStart +"/"+textLenght);
+
+			if(hadReadStart>0){//上次有阅读
+				if (textLenght > hadReadStart) {
+					showPage(view1, hadReadStart);
+
+					if (textLenght > ( hadReadStart + NextPage.COUNT << 1)) {//有第2页
+						showPage(view2,hadReadStart + NextPage.COUNT);
+						nextpage.startIndex = hadReadStart + NextPage.COUNT;
+						nextpage.endIndex = hadReadStart + NextPage.COUNT*2 ;
+					} else { //没有下一页，下一章
+						nextpage.nextChapter++;
+						new ReadingThread().start();
+						showPage(view2,0);
+						nextpage.startIndex = 0;
+						nextpage.endIndex  = NextPage.COUNT;
+					}
+				} else {
+					Log.e(TAG,"这里怎么进来的");
+					nextpage.nextChapter++;
+					new ReadingThread().start();
+					nextEndIndex = NextPage.COUNT;
+					showPage(view1,nextEndIndex);
+				}
+
+			}else {//第一次读
+				if (textLenght > NextPage.COUNT) { //有第二页
+					showPage(view1,0);
+					if (textLenght > (NextPage.COUNT << 1)) {//有第2页 <<1等于 *2
+						showPage(view2, NextPage.COUNT);
+						nextpage.startIndex = NextPage.COUNT;
+						nextpage.endIndex = NextPage.COUNT << 1;
+					} else { //没有第3页,取到结尾
+						showPage(view2, NextPage.COUNT);
+						nextpage.startIndex = NextPage.COUNT;
+						nextpage.endIndex = textLenght;
+						//new ReadingThread().start();
+					}
+				} else { //小于一页
+					showPage(view1, 0);
+				}
+			}
+
+		};
+	};
 
 }

@@ -23,7 +23,7 @@
             android:value="10010" />
 
         <activity
-            android:name=".ui.ChapterActivity"
+            android:name=".ui.MainActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
             <intent-filter>
